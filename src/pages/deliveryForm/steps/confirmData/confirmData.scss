@@ -1,0 +1,46 @@
+.page-confirmation {
+	text-align: center;
+	&__title {
+		font-size: 3rem;
+		margin-bottom: 0.5em;
+		@media (max-width: 48em) {
+			font-size: 2rem;
+		}
+	}
+	&__stepper {
+		margin-bottom: 40px;
+		@media (max-width: 48em) {
+			margin-bottom: 20px;
+		}
+	}
+	&__body {
+		font-size: 1.25rem;
+		line-height: 130%;
+		&:not(:last-child) {
+			margin-bottom: 2em;
+		}
+	}
+	&__text {
+		&:not(:last-child) {
+			margin-bottom: 0.25em;
+		}
+	}
+	&__footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 20px;
+		padding-top: 40px;
+		@media (max-width: 48em) {
+			flex-direction: column-reverse;
+			justify-content: center;
+			padding-top: 20px;
+			gap: 10px;
+		}
+	}
+	&__navigation {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+	}
+}
