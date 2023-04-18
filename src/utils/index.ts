@@ -6,6 +6,7 @@ import { getFormattedPrice } from "./getFormattedPrice";
 import { transformFileList } from "./transformFileList";
 import { prepareOrdersTableData } from "./prepareOrdersTableData";
 import { getYearsFromRange } from "./getYearsFromRange";
+import { replaceCountryIconPath } from "./replaceCountryIconPath";
 
 export {
 	COUNTRIES,
@@ -18,4 +19,5 @@ export {
 	transformFileList,
 	prepareOrdersTableData,
 	getYearsFromRange,
+	replaceCountryIconPath,
 };

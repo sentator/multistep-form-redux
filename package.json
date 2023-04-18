@@ -31,6 +31,7 @@
 		"react-transition-group": "^4.4.5",
 		"redux": "^4.2.1",
 		"redux-saga": "^1.2.3",
+		"reselect": "^4.1.8",
 		"typescript": "^4.9.5",
 		"uuid": "^9.0.0",
 		"web-vitals": "^2.1.4",
@@ -64,9 +65,12 @@
 	},
 	"devDependencies": {
 		"@types/react-datepicker": "^4.10.0",
+		"@types/react-redux": "^7.1.25",
 		"@types/react-table": "^7.7.14",
+		"@types/redux-saga": "^0.10.5",
 		"@types/uuid": "^9.0.1",
 		"gh-pages": "^5.0.0",
+		"redux-devtools-extension": "^2.13.9",
 		"sass": "^1.59.3"
 	}
 }

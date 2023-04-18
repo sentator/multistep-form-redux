@@ -9,7 +9,7 @@ import es from "../assets/images/countries/es.svg";
 import tr from "../assets/images/countries/tr.svg";
 import cz from "../assets/images/countries/cz.svg";
 
-export const COUNTRIES: OptionItem[] = [
+export const COUNTRIES: Required<OptionItem>[] = [
 	{
 		id: "us",
 		name: "США",
