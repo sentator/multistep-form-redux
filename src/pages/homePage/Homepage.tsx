@@ -6,7 +6,7 @@ import { useOrdersTableColumns } from "../../hooks";
 import NavigationLink from "../../components/navigationLink/NavigationLink";
 import OrdersTable from "../../components/ordersTable/OrdersTable";
 import { ordersRequest } from "../../store/orders/actions";
-import { ordersStatusSelector, ordersSelector } from "../../store/orders/selectors";
+import { ordersFetchingStatusSelector, ordersSelector } from "../../store/orders/selectors";
 
 import "./homepage.scss";
 
@@ -14,12 +14,14 @@ const Homepage = () => {
 	const columns = useOrdersTableColumns();
 	const dispatch = useDispatch();
 	const orders = useSelector(ordersSelector);
-	const status = useSelector(ordersStatusSelector);
+	const status = useSelector(ordersFetchingStatusSelector);
 
 	const data = React.useMemo(() => prepareOrdersTableData(orders), [orders]);
 
 	React.useEffect(() => {
-		dispatch(ordersRequest());
+		if (!orders.length) {
+			dispatch(ordersRequest());
+		}
 	}, []);
 
 	return (

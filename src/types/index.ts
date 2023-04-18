@@ -58,6 +58,8 @@ interface OrderResponseData {
 	updatedAt: string;
 }
 
+interface OrderSendData extends Omit<DeliveryFormState, "documents">, Partial<Pick<DeliveryFormState, "documents">> {}
+
 interface UploadedFile {
 	originalName: string;
 	fileName: string;
@@ -86,6 +88,7 @@ export type {
 	DeliveryFormState,
 	StepperBarItem,
 	OrderResponseData,
+	OrderSendData,
 	UploadedFile,
 	OrdersTableData,
 };

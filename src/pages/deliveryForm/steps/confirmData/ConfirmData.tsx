@@ -1,33 +1,42 @@
 import React from "react";
-// import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
 
-import { OrderResponseData, StepperBarItem } from "../../../../types";
+import { StepperBarItem } from "../../../../types";
 import { deliveryFormContext } from "../../../../context";
-import useDeliveryFormService from "../../../../services/deliveryForm";
 import StepperBar from "../../../../components/stepperBar/StepperBar";
 import NavigationLink from "../../../../components/navigationLink/NavigationLink";
 import Button from "../../../../components/button/Button";
+import { createOrderRequest, resetOrderSendingStatus } from "../../../../store/orders/actions";
+import { ordersSendingStatusSelector, ordersSendingErrorSelector } from "../../../../store/orders/selectors";
 
 import "./confirmData.scss";
 
 const ConfirmData = () => {
-	const { isDocumentsRequired, clearContextData } = React.useContext(deliveryFormContext);
+	const { isDocumentsRequired, clearContextData, formState } = React.useContext(deliveryFormContext);
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { createNewOrder } = useDeliveryFormService();
-	// const queryClient = useQueryClient();
-	// const {
-	// 	mutate: sendOrderData,
-	// 	isLoading,
-	// 	isError,
-	// 	error,
-	// } = useMutation<OrderResponseData | null, Error>(createNewOrder, {
-	// 	onSuccess: () => {
-	// 		queryClient.invalidateQueries(["orders"]);
-	// 		navigate("/");
-	// 		clearContextData();
-	// 	},
-	// });
+	const status = useSelector(ordersSendingStatusSelector);
+	const error = useSelector(ordersSendingErrorSelector);
+
+	React.useEffect(() => {
+		if (status === "success") {
+			onSuccessSending();
+		}
+	}, [status]);
+
+	const onSuccessSending = () => {
+		dispatch(resetOrderSendingStatus());
+		navigate("/");
+		clearContextData();
+	};
+
+	const sendOrderData = () => {
+		const order = isDocumentsRequired
+			? formState
+			: { generalInformation: formState.generalInformation, address: formState.address };
+		dispatch(createOrderRequest({ order }));
+	};
 
 	const steps: StepperBarItem[] = isDocumentsRequired
 		? [
@@ -45,22 +54,22 @@ const ConfirmData = () => {
 			<div className="page-confirmation__stepper">
 				<StepperBar steps={steps} />
 			</div>
-			{/* <div className="page-confirmation__body">
-				{isLoading && (
+			<div className="page-confirmation__body">
+				{status === "sending" && (
 					<>
 						<p className="page-confirmation__text">ЗАЧЕКАЙТЕ, БУДЬ ЛАСКА!</p>
 						<p className="page-confirmation__text">Відбувається надсилання форми...</p>
 					</>
 				)}
-				{isError && (
+				{status === "error" && (
 					<>
 						<>
 							<p className="page-confirmation__text">СТАЛАСЯ ПОМИЛКА!</p>
-							<p className="page-confirmation__text">{error.message}</p>
+							{error && <p className="page-confirmation__text">{error}</p>}
 						</>
 					</>
 				)}
-				{!isLoading && !isError && (
+				{status === "idle" && (
 					<>
 						<p className="page-confirmation__text">ВІТАЄМО!</p>
 						<p className="page-confirmation__text">
@@ -73,9 +82,13 @@ const ConfirmData = () => {
 				<Button title="Скасувати" type="button" onClick={() => navigate("/")} />
 				<div className="page-confirmation__navigation">
 					<NavigationLink to="/new-order/address" title="Редагувати форму" />
-					<Button title="Відправити" onClick={() => sendOrderData()} disabled={isLoading || isError} />
+					<Button
+						title="Відправити"
+						onClick={() => sendOrderData()}
+						disabled={status === "sending" || status === "error"}
+					/>
 				</div>
-			</div> */}
+			</div>
 		</div>
 	);
 };
