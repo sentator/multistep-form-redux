@@ -1,41 +1,40 @@
 import React from "react";
-import { useNavigate } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { StepperBarItem } from "../../../../types";
 import { deliveryFormContext } from "../../../../context";
+import { useActionAsync } from "../../../../store/action.hook";
 import StepperBar from "../../../../components/stepperBar/StepperBar";
 import NavigationLink from "../../../../components/navigationLink/NavigationLink";
 import Button from "../../../../components/button/Button";
-import { createOrderRequest, resetOrderSendingStatus } from "../../../../store/orders/actions";
-import { ordersSendingStatusSelector, ordersSendingErrorSelector } from "../../../../store/orders/selectors";
+import { createOrder as createOrderAction } from "../../../../store/orders/actions";
 
 import "./confirmData.scss";
 
 const ConfirmData = () => {
 	const { isDocumentsRequired, clearContextData, formState } = React.useContext(deliveryFormContext);
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const status = useSelector(ordersSendingStatusSelector);
-	const error = useSelector(ordersSendingErrorSelector);
+	const createOrder = useActionAsync(createOrderAction);
+	const [isSending, setSending] = React.useState<boolean>(false);
+	const [error, setError] = React.useState<string | null>(null);
 
-	React.useEffect(() => {
-		if (status === "success") {
-			onSuccessSending();
-		}
-	}, [status]);
-
-	const onSuccessSending = () => {
-		dispatch(resetOrderSendingStatus());
-		navigate("/");
-		clearContextData();
-	};
-
-	const sendOrderData = () => {
+	const sendOrderData = async () => {
 		const order = isDocumentsRequired
 			? formState
 			: { generalInformation: formState.generalInformation, address: formState.address };
-		dispatch(createOrderRequest({ order }));
+
+		try {
+			setSending(true);
+
+			await createOrder({ order });
+			clearContextData();
+			navigate("/");
+		} catch (e) {
+			const error = e instanceof Error ? e.message : "Сталася помилка при створенні замовлення";
+			setError(error);
+		} finally {
+			setSending(false);
+		}
 	};
 
 	const steps: StepperBarItem[] = isDocumentsRequired
@@ -55,21 +54,21 @@ const ConfirmData = () => {
 				<StepperBar steps={steps} />
 			</div>
 			<div className="page-confirmation__body">
-				{status === "sending" && (
+				{isSending && (
 					<>
 						<p className="page-confirmation__text">ЗАЧЕКАЙТЕ, БУДЬ ЛАСКА!</p>
 						<p className="page-confirmation__text">Відбувається надсилання форми...</p>
 					</>
 				)}
-				{status === "error" && (
+				{!!error && (
 					<>
 						<>
 							<p className="page-confirmation__text">СТАЛАСЯ ПОМИЛКА!</p>
-							{error && <p className="page-confirmation__text">{error}</p>}
+							<p className="page-confirmation__text">{error}</p>
 						</>
 					</>
 				)}
-				{status === "idle" && (
+				{!isSending && !error && (
 					<>
 						<p className="page-confirmation__text">ВІТАЄМО!</p>
 						<p className="page-confirmation__text">
@@ -82,11 +81,7 @@ const ConfirmData = () => {
 				<Button title="Скасувати" type="button" onClick={() => navigate("/")} />
 				<div className="page-confirmation__navigation">
 					<NavigationLink to="/new-order/address" title="Редагувати форму" />
-					<Button
-						title="Відправити"
-						onClick={() => sendOrderData()}
-						disabled={status === "sending" || status === "error"}
-					/>
+					<Button title="Відправити" onClick={sendOrderData} disabled={isSending || !!error} />
 				</div>
 			</div>
 		</div>

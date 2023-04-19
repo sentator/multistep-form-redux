@@ -1,7 +1,32 @@
-export const FETCH_ORDERS_REQUEST = "FETCH_ORDERS_REQUEST";
-export const FETCH_ORDERS_SUCCESS = "FETCH_ORDERS_SUCCESS";
-export const FETCH_ORDERS_FAILURE = "FETCH_ORDERS_FAILURE";
-export const CREATE_ORDER_REQUEST = "CREATE_ORDER_REQUEST";
-export const CREATE_ORDER_SUCCESS = "CREATE_ORDER_SUCCESS";
-export const CREATE_ORDER_FAILURE = "CREATE_ORDER_FAILURE";
-export const RESET_ORDER_SENDING_STATUS = "RESET_ORDER_SENDING_STATUS";
+import { OrderResponseData, OrderSendData } from "../../types";
+import { Action } from "../actionHelpers";
+
+export enum OrderActionTypes {
+	FETCH_ORDERS_REQUEST = "FETCH_ORDERS_REQUEST",
+	FETCH_ORDERS_SUCCESS = "FETCH_ORDERS_SUCCESS",
+	FETCH_ORDERS_FAIL = "FETCH_ORDERS_FAIL",
+
+	CREATE_ORDER_REQUEST = "CREATE_ORDER_REQUEST",
+	CREATE_ORDER_SUCCESS = "CREATE_ORDER_SUCCESS",
+	CREATE_ORDER_FAIL = "CREATE_ORDER_FAIL",
+}
+
+export type GetOrdersAction = Action<typeof OrderActionTypes.FETCH_ORDERS_REQUEST>;
+export type GetOrdersActionSuccess = Action<
+	typeof OrderActionTypes.FETCH_ORDERS_SUCCESS,
+	{
+		orders: OrderResponseData[];
+	}
+>;
+export type CreateOrderAction = Action<
+	typeof OrderActionTypes.CREATE_ORDER_REQUEST,
+	{
+		order: OrderSendData;
+	}
+>;
+export type CreateOrderActionSuccess = Action<
+	typeof OrderActionTypes.CREATE_ORDER_SUCCESS,
+	{
+		order: OrderResponseData;
+	}
+>;

@@ -1,37 +1,43 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 
-import { ordersSuccess, ordersFailure, createOrderSuccess, createOrderFailure } from "./actions";
-import { FETCH_ORDERS_REQUEST, CREATE_ORDER_REQUEST } from "./actionTypes";
-import { OrderResponseData, OrderSendData } from "../../types";
+import { OrderResponseData } from "../../types";
+import { OrderActionTypes, GetOrdersAction, CreateOrderAction } from "./actionTypes";
+import { getOrdersSuccess, createOrderSuccess } from "./actions";
 import { fetchOrders, createNewOrder } from "../../services/ordersService";
 
-function* fetchOrdersWorker() {
+function* fetchOrdersWorker({
+	type,
+	payload,
+	meta,
+}: GetOrdersAction & { meta: { resolve: (value: OrderResponseData[]) => void; reject: (reason?: unknown) => void } }) {
 	try {
 		const response: OrderResponseData[] = yield call(fetchOrders);
-		yield put(ordersSuccess({ orders: response }));
-	} catch (error) {
-		const errorMessage =
-			error instanceof Error ? error.message : "Сталася помилка при завантаженні списку замовлень";
 
-		yield put(ordersFailure({ fetchingError: errorMessage }));
+		meta.resolve(response);
+		yield put(getOrdersSuccess({ orders: response }));
+	} catch (error) {
+		meta.reject(error);
 	}
 }
 
-function* createOrderWorker({ payload }: { type: typeof CREATE_ORDER_REQUEST; payload: { order: OrderSendData } }) {
+function* createOrderWorker({
+	type,
+	payload,
+	meta,
+}: CreateOrderAction & { meta: { resolve: (value: OrderResponseData) => void; reject: (reason?: unknown) => void } }) {
 	try {
 		const response: OrderResponseData = yield call(createNewOrder, payload.order);
 
+		meta.resolve(response);
 		yield put(createOrderSuccess({ order: response }));
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : "Сталася помилка при відправленні форми";
-
-		yield put(createOrderFailure({ sendingError: errorMessage }));
+		meta.reject(error);
 	}
 }
 
 function* ordersSaga() {
-	yield takeLatest(FETCH_ORDERS_REQUEST, fetchOrdersWorker);
-	yield takeLatest(CREATE_ORDER_REQUEST, createOrderWorker);
+	yield takeLatest(OrderActionTypes.FETCH_ORDERS_REQUEST, fetchOrdersWorker);
+	yield takeLatest(OrderActionTypes.CREATE_ORDER_REQUEST, createOrderWorker);
 }
 
 export default ordersSaga;
