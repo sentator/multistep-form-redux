@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { StepperBarItem } from "../../../../types";
+import { OrderProgressStatusLabel, StepperBarItem } from "../../../../types";
 import { deliveryFormContext } from "../../../../context";
 import { useActionAsync } from "../../../../store/action.hook";
 import StepperBar from "../../../../components/stepperBar/StepperBar";
@@ -19,9 +19,23 @@ const ConfirmData = () => {
 	const [error, setError] = React.useState<string | null>(null);
 
 	const sendOrderData = async () => {
+		const progress = [
+			{
+				label: OrderProgressStatusLabel.PROCESSED,
+				status: "Заявка оброблена",
+				createdAt: new Date(Date.now()).toISOString(),
+			},
+		];
 		const order = isDocumentsRequired
-			? formState
-			: { generalInformation: formState.generalInformation, address: formState.address };
+			? {
+					...formState,
+					progress,
+			  }
+			: {
+					generalInformation: formState.generalInformation,
+					address: formState.address,
+					progress,
+			  };
 
 		try {
 			setSending(true);

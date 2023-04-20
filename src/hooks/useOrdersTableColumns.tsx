@@ -1,9 +1,13 @@
 import React from "react";
 import { Column } from "react-table";
+import { useNavigate } from "react-router-dom";
 
 import { OrdersTableData } from "../types";
+import { formatDateForOrderStatus } from "../utils";
+import Button from "../components/button/Button";
 
 const useOrdersTableColumns = () => {
+	const navigate = useNavigate();
 	const columns: Column<OrdersTableData>[] = React.useMemo(
 		() => [
 			{
@@ -56,6 +60,68 @@ const useOrdersTableColumns = () => {
 							</span>
 						),
 						accessor: "totalPrice",
+					},
+				],
+			},
+			{
+				Header: "Дії",
+				columns: [
+					{
+						id: "status",
+						Header: "Статус",
+						accessor: "progress",
+						Cell: (value: any) => {
+							const progress = value.cell.row.original.progress;
+							if (progress && Array.isArray(progress) && progress.length) {
+								const { status, createdAt } = progress[progress.length - 1];
+								const formattedDate = Boolean(createdAt)
+									? formatDateForOrderStatus(new Date(createdAt))
+									: "";
+								const cellValue = (
+									<>
+										<span>{status}</span>
+										<br />
+										<span>{formattedDate}</span>
+									</>
+								);
+								return cellValue;
+							}
+							return "Застарілий формат";
+						},
+					},
+					{
+						id: "user",
+						Header: "Користувач",
+						accessor: "_id",
+						Cell: (value: any) => {
+							const id = value.cell.row.original._id;
+							return id ? (
+								<Button
+									type="button"
+									title="Редагувати"
+									onClick={() => navigate(`/user/orders/${id}`)}
+								/>
+							) : (
+								""
+							);
+						},
+					},
+					{
+						id: "admin",
+						Header: "Адміністратор",
+						accessor: "_id",
+						Cell: (value: any) => {
+							const id = value.cell.row.original._id;
+							return id ? (
+								<Button
+									type="button"
+									title="Редагувати"
+									onClick={() => navigate(`/admin/orders/${id}`)}
+								/>
+							) : (
+								""
+							);
+						},
 					},
 				],
 			},

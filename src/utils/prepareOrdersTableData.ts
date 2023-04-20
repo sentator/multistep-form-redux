@@ -7,13 +7,17 @@ export const prepareOrdersTableData = (
 	const data: OrdersTableData[] =
 		orderResponseData?.map(
 			({
+				_id,
 				data: {
 					generalInformation: { orderComposition, ...rest },
+					progress,
 				},
 			}) => {
 				const { symbol: currencySymbol } = CURRENCY[rest.country.label];
 				return {
 					...rest,
+					_id,
+					progress,
 					productName: orderComposition
 						.reduce((acc: string[], item: ProductItem) => {
 							acc = [...acc, item.productName];
@@ -42,6 +46,7 @@ export const prepareOrdersTableData = (
 									subRows: null,
 									...item,
 									totalPrice: item.totalPrice.toFixed(2) + ` ${currencySymbol}`,
+									progress: [{ status: "", createdAt: "" }],
 							  }))
 							: null,
 				};

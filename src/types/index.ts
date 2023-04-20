@@ -5,6 +5,7 @@ import {
 	DeliveryFormState,
 	StepperBarItem,
 } from "./deliveryForm";
+
 interface OptionItem {
 	id: string;
 	name: string;
@@ -23,6 +24,19 @@ interface CurrencyRate {
 	usd: { rate: number };
 	eur: { rate: number };
 	gbp: { rate: number };
+}
+
+interface OrderProgressStatusItem {
+	label: OrderProgressStatusLabel;
+	status: string;
+	createdAt: string;
+}
+
+export enum OrderProgressStatusLabel {
+	PROCESSED = "PROCESSED",
+	WAREHOUSE = "WAREHOUSE",
+	TRANSIT = "TRANSIT",
+	DEPARTMENT = "DEPARTMENT",
 }
 
 interface OrderResponseData {
@@ -53,12 +67,16 @@ interface OrderResponseData {
 			deliveryAddress: string;
 			phoneNumber: string;
 		};
+		progress: OrderProgressStatusItem[];
 	};
 	createdAt: string;
 	updatedAt: string;
+	progress: OrderProgressStatusItem[];
 }
 
-interface OrderSendData extends Omit<DeliveryFormState, "documents">, Partial<Pick<DeliveryFormState, "documents">> {}
+interface OrderSendData extends Omit<DeliveryFormState, "documents">, Partial<Pick<DeliveryFormState, "documents">> {
+	progress: OrderProgressStatusItem[];
+}
 
 interface UploadedFile {
 	originalName: string;
@@ -67,6 +85,7 @@ interface UploadedFile {
 }
 
 interface OrdersTableData {
+	_id: string;
 	country: OptionItem | { name: string; icon: null };
 	shop: OptionItem | { name: string };
 	parcelName: string;
@@ -75,7 +94,8 @@ interface OrdersTableData {
 	totalPrice: string;
 	promocode: string;
 	trackNumber: string;
-	subRows: OrdersTableData[] | null;
+	progress: OrderProgressStatusItem[];
+	subRows: Omit<OrdersTableData, "_id" | "progress">[] | null;
 }
 
 export type {

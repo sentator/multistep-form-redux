@@ -7,6 +7,7 @@ import { transformFileList } from "./transformFileList";
 import { prepareOrdersTableData } from "./prepareOrdersTableData";
 import { getYearsFromRange } from "./getYearsFromRange";
 import { replaceCountryIconPath } from "./replaceCountryIconPath";
+import { formatDateForOrderStatus } from "./formatDateForOrderStatus";
 
 export {
 	COUNTRIES,
@@ -20,4 +21,5 @@ export {
 	prepareOrdersTableData,
 	getYearsFromRange,
 	replaceCountryIconPath,
+	formatDateForOrderStatus,
 };
