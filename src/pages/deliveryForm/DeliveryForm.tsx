@@ -1,9 +1,15 @@
 import React from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation, Navigate } from "react-router-dom";
 
 import "./deliveryForm.scss";
 
 const DeliveryForm: React.FC = () => {
+	const { pathname } = useLocation();
+
+	if (pathname === "/new-order") {
+		return <Navigate to="/new-order/general-information" />;
+	}
+
 	return (
 		<div className="delivery-form-wrapper">
 			<div className="container">

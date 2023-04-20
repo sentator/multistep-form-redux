@@ -39,12 +39,12 @@ const ConfirmData = () => {
 
 	const steps: StepperBarItem[] = isDocumentsRequired
 		? [
-				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/generalInformation" },
+				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
 				{ title: "Документи", status: "completed", url: "/new-order/documents" },
 				{ title: "Адреса отримання", status: "completed", url: "/new-order/address" },
 		  ]
 		: [
-				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/generalInformation" },
+				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
 				{ title: "Адреса отримання", status: "completed", url: "/new-order/address" },
 		  ];
 

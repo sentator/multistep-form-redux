@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import { StepDocumentsValues, StepperBarItem } from "../../../../types";
@@ -64,7 +64,7 @@ const Documents: React.FC = () => {
 	});
 
 	const steps: StepperBarItem[] = [
-		{ title: "Інформація про відправлення", status: "completed", url: "/new-order/generalInformation" },
+		{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
 		{ title: "Документи", status: "editing" },
 		{ title: "Адреса отримання", status: "hidden" },
 	];
@@ -137,7 +137,7 @@ const Documents: React.FC = () => {
 						<div className="documents-form__row documents-form__row--controls">
 							<Button title="Скасувати" type="button" onClick={() => navigate("/")} />
 							<div className="documents-form__navigation">
-								<NavigationLink title="Назад" to="/new-order/generalInformation" />
+								<NavigationLink title="Назад" to="/new-order/general-information" />
 								<NavigationButton title="Продовжити" iconPosition="right" type="submit" />
 							</div>
 						</div>

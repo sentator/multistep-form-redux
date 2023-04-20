@@ -24,7 +24,7 @@ const Address: React.FC = () => {
 
 	const navigate = useNavigate();
 
-	const prevStep = isDocumentsRequired ? "/new-order/documents" : "/new-order/generalInformation";
+	const prevStep = isDocumentsRequired ? "/new-order/documents" : "/new-order/general-information";
 	const nextStep = "/new-order/confirm-data";
 
 	const submitStep = (data: StepAddressValues) => {
@@ -46,12 +46,12 @@ const Address: React.FC = () => {
 
 	const steps: StepperBarItem[] = isDocumentsRequired
 		? [
-				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/generalInformation" },
+				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
 				{ title: "Документи", status: "completed", url: "/new-order/documents" },
 				{ title: "Адреса отримання", status: "editing" },
 		  ]
 		: [
-				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/generalInformation" },
+				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
 				{ title: "Адреса отримання", status: "editing" },
 		  ];
 

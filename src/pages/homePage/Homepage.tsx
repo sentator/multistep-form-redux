@@ -45,7 +45,7 @@ const Homepage = () => {
 					<div className="homepage__create-new">
 						<NavigationLink
 							title="Зареєструвати відправлення"
-							to="/new-order/generalInformation"
+							to="/new-order/general-information"
 							iconPosition="right"
 						/>
 					</div>
