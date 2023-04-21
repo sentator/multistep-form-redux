@@ -1,9 +1,16 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { DeliveryFormState, StepAddressValues, StepDocumentsValues, StepGeneralInformationValues } from "../types";
+import {
+	StepAddressValues,
+	StepGeneralInformationValues,
+	EditOrderFormState,
+	EditOrderStepDocumentsValues,
+	OrderResponseData,
+	OrderProgressStatusLabel,
+} from "../types";
 
-const FORM_DEFAULT_STATE: DeliveryFormState = {
+const FORM_DEFAULT_STATE: EditOrderFormState = {
 	generalInformation: {
 		country: null,
 		shop: null,
@@ -29,20 +36,26 @@ const FORM_DEFAULT_STATE: DeliveryFormState = {
 		deliveryAddress: "",
 		phoneNumber: "",
 	},
+	status: {
+		name: "Заявка оброблена",
+		label: OrderProgressStatusLabel.PROCESSED,
+		createdAt: "",
+	},
 };
 
-interface DeliveryFormContext {
-	formState: DeliveryFormState;
+interface EditOrderFormContext {
+	formState: EditOrderFormState;
 	updateGeneralInformation: (value: StepGeneralInformationValues) => void;
-	updateDocuments: (value: StepDocumentsValues) => void;
+	updateDocuments: (value: EditOrderStepDocumentsValues) => void;
 	updateAddress: (value: StepAddressValues) => void;
 	clearContextData: () => void;
 	isDocumentsRequired: boolean;
 	addStepDocuments: () => void;
 	removeStepDocuments: () => void;
+	setInitialState: (data: OrderResponseData) => void;
 }
 
-export const deliveryFormContext = React.createContext<DeliveryFormContext>({
+export const editOrderFormContext = React.createContext<EditOrderFormContext>({
 	formState: FORM_DEFAULT_STATE,
 	updateGeneralInformation: (value) => {},
 	updateDocuments: (value) => {},
@@ -51,6 +64,7 @@ export const deliveryFormContext = React.createContext<DeliveryFormContext>({
 	isDocumentsRequired: false,
 	addStepDocuments: () => {},
 	removeStepDocuments: () => {},
+	setInitialState: () => {},
 });
 
 interface ContextProps {
@@ -58,14 +72,14 @@ interface ContextProps {
 }
 
 const Context: React.FC<ContextProps> = ({ children }) => {
-	const [formState, setFormState] = React.useState<DeliveryFormState>(FORM_DEFAULT_STATE);
+	const [formState, setFormState] = React.useState<EditOrderFormState>(FORM_DEFAULT_STATE);
 	const [isDocumentsRequired, setDocumentsRequired] = React.useState<boolean>(false);
 
 	const updateGeneralInformation = (value: StepGeneralInformationValues) => {
 		setFormState({ ...formState, generalInformation: value });
 	};
 
-	const updateDocuments = (value: StepDocumentsValues) => {
+	const updateDocuments = (value: EditOrderStepDocumentsValues) => {
 		setFormState({ ...formState, documents: value });
 	};
 
@@ -85,8 +99,25 @@ const Context: React.FC<ContextProps> = ({ children }) => {
 		setDocumentsRequired(false);
 	};
 
+	const setInitialState = (data: OrderResponseData) => {
+		const documents: EditOrderFormState["documents"] =
+			data.documents && data.documents.firstName
+				? {
+						...data.documents,
+						birthDate: new Date(data.documents.birthDate),
+						passportIssueDate: new Date(data.documents.passportIssueDate),
+				  }
+				: FORM_DEFAULT_STATE.documents;
+		setFormState({
+			generalInformation: data.generalInformation,
+			documents,
+			address: data.address,
+			status: data.status,
+		});
+	};
+
 	return (
-		<deliveryFormContext.Provider
+		<editOrderFormContext.Provider
 			value={{
 				formState,
 				updateGeneralInformation,
@@ -96,10 +127,11 @@ const Context: React.FC<ContextProps> = ({ children }) => {
 				isDocumentsRequired,
 				addStepDocuments,
 				removeStepDocuments,
+				setInitialState,
 			}}
 		>
 			{children}
-		</deliveryFormContext.Provider>
+		</editOrderFormContext.Provider>
 	);
 };
 

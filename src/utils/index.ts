@@ -1,4 +1,4 @@
-import { COUNTRIES, SHOPS, CURRENCY } from "./database";
+import { COUNTRIES, SHOPS, CURRENCY, ORDER_STATUS_OPTIONS } from "./database";
 import { calcTotalPrice } from "./calcTotalPrice";
 import { convertToEuro } from "./convertToEuro";
 import { calcCustomsFees } from "./calcCustomsFees";
@@ -13,6 +13,7 @@ export {
 	COUNTRIES,
 	SHOPS,
 	CURRENCY,
+	ORDER_STATUS_OPTIONS,
 	calcTotalPrice,
 	convertToEuro,
 	calcCustomsFees,

@@ -1,0 +1,37 @@
+.edit-order-form-wrapper {
+	&__title {
+		margin-bottom: 0.6em;
+	}
+	&__body {
+	}
+}
+.edit-order-form-admin {
+	&__row {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px;
+		@media (max-width: 48em) {
+			grid-template-columns: auto;
+		}
+	}
+	&__column {
+	}
+	&__controls {
+		margin-top: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px 20px;
+	}
+	&__message {
+		display: flex;
+		min-height: 100%;
+		flex-direction: column;
+		justify-content: center;
+		text-align: center;
+	}
+	&__title {
+	}
+	&__description {
+	}
+}

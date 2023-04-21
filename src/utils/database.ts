@@ -1,4 +1,4 @@
-import { CurrencyRate, OptionItem } from "../types";
+import { CurrencyRate, OptionItem, OrderProgressStatusLabel } from "../types";
 import us from "../assets/images/countries/us.svg";
 import gb from "../assets/images/countries/gb.svg";
 import de from "../assets/images/countries/de.svg";
@@ -144,3 +144,26 @@ export const CURRENCY_CONVERSION_RATES: CurrencyRate = {
 	eur: { rate: 1 },
 	gbp: { rate: 1.14 },
 };
+
+export const ORDER_STATUS_OPTIONS = [
+	{
+		id: "processed",
+		name: "Заявка оброблена",
+		label: OrderProgressStatusLabel.PROCESSED,
+	},
+	{
+		id: "warehouse",
+		name: "На складі",
+		label: OrderProgressStatusLabel.WAREHOUSE,
+	},
+	{
+		id: "transit",
+		name: "В транзиті",
+		label: OrderProgressStatusLabel.TRANSIT,
+	},
+	{
+		id: "department",
+		name: "У відділенні",
+		label: OrderProgressStatusLabel.DEPARTMENT,
+	},
+];

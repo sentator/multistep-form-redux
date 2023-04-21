@@ -1,9 +1,15 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 
-import { OrderResponseData } from "../../types";
-import { OrderActionTypes, GetOrdersAction, CreateOrderAction } from "./actionTypes";
-import { getOrdersSuccess, createOrderSuccess } from "./actions";
-import { fetchOrders, createNewOrder } from "../../services/ordersService";
+import { OrderResponseData, OrderProgressStatusItem } from "../../types";
+import {
+	OrderActionTypes,
+	GetOrdersAction,
+	CreateOrderAction,
+	UpdateOrderAction,
+	UpdateOrderStatusAction,
+} from "./actionTypes";
+import { getOrdersSuccess, createOrderSuccess, updateOrderSuccess, updateOrderStatusSuccess } from "./actions";
+import { fetchOrders, createNewOrder, updateOrderData, updateOrderStatus } from "../../services/ordersService";
 
 function* fetchOrdersWorker({
 	type,
@@ -35,9 +41,43 @@ function* createOrderWorker({
 	}
 }
 
+function* updateOrderWorker({
+	type,
+	payload,
+	meta,
+}: UpdateOrderAction & { meta: { resolve: (value: OrderResponseData) => void; reject: (reason?: unknown) => void } }) {
+	try {
+		const response: OrderResponseData = yield call(updateOrderData, payload.orderId, payload.order);
+
+		meta.resolve(response);
+		yield put(updateOrderSuccess({ order: response }));
+	} catch (error) {
+		meta.reject(error);
+	}
+}
+
+function* updateOrderStatusWorker({
+	type,
+	payload,
+	meta,
+}: UpdateOrderStatusAction & {
+	meta: { resolve: (value: OrderResponseData) => void; reject: (reason?: unknown) => void };
+}) {
+	try {
+		const response: OrderResponseData = yield call(updateOrderStatus, payload.orderId, payload.status);
+
+		meta.resolve(response);
+		yield put(updateOrderStatusSuccess({ order: response }));
+	} catch (error) {
+		meta.reject(error);
+	}
+}
+
 function* ordersSaga() {
 	yield takeLatest(OrderActionTypes.FETCH_ORDERS_REQUEST, fetchOrdersWorker);
 	yield takeLatest(OrderActionTypes.CREATE_ORDER_REQUEST, createOrderWorker);
+	yield takeLatest(OrderActionTypes.UPDATE_ORDER_REQUEST, updateOrderWorker);
+	yield takeLatest(OrderActionTypes.UPDATE_ORDER_STATUS_REQUEST, updateOrderStatusWorker);
 }
 
 export default ordersSaga;

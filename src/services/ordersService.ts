@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 
-import { OrderResponseData, OrderSendData, UploadedFile } from "../types";
+import { OrderProgressStatusItem, OrderResponseData, OrderSendData, UploadedFile } from "../types";
 import { apiClient } from "../apiClient";
 import { replaceCountryIconPath } from "../utils";
 
@@ -49,11 +49,55 @@ export const createNewOrder = async (orderData: OrderSendData) => {
 		: orderData;
 
 	try {
-		const response = await apiClient.post<OrderResponseData>("/api/orders", JSON.stringify({ data }), {
+		const response = await apiClient.post<OrderResponseData>("/api/orders", JSON.stringify({ ...data }), {
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
+
+		return response.data;
+	} catch (error) {
+		if (isAxiosError<OrderResponseData>(error)) {
+			throw new Error("Не вдалося відправити дані форми");
+		}
+	}
+
+	return null;
+};
+
+export const updateOrderData = async (orderId: string, orderData: OrderSendData) => {
+	try {
+		const response = await apiClient.put<OrderResponseData>(
+			`/api/orders/${orderId}`,
+			JSON.stringify({ ...orderData }),
+			{
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
+
+		return response.data;
+	} catch (error) {
+		if (isAxiosError<OrderResponseData>(error)) {
+			throw new Error("Не вдалося відправити дані форми");
+		}
+	}
+
+	return null;
+};
+
+export const updateOrderStatus = async (orderId: string, orderStatus: OrderProgressStatusItem) => {
+	try {
+		const response = await apiClient.put<OrderResponseData>(
+			`/api/orders/${orderId}`,
+			JSON.stringify({ status: orderStatus }),
+			{
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
 
 		return response.data;
 	} catch (error) {

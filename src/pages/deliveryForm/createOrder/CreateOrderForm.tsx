@@ -1,9 +1,9 @@
 import React from "react";
 import { Outlet, useLocation, Navigate } from "react-router-dom";
 
-import "./deliveryForm.scss";
+import "./createOrderForm.scss";
 
-const DeliveryForm: React.FC = () => {
+const CreateOrderForm: React.FC = () => {
 	const { pathname } = useLocation();
 
 	if (pathname === "/new-order") {
@@ -22,4 +22,4 @@ const DeliveryForm: React.FC = () => {
 	);
 };
 
-export default DeliveryForm;
+export default CreateOrderForm;

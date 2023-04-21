@@ -1,0 +1,52 @@
+.documents-form {
+	&__stepper {
+		margin-bottom: 40px;
+		@media (max-width: 48rem) {
+			margin-bottom: 20px;
+		}
+	}
+	&__form {
+	}
+	/* .documents-form__invoice */
+	&__invoice {
+		margin-bottom: 40px;
+	}
+	/* .documents-form__row */
+	&__row {
+		display: grid;
+		&:not(:last-child) {
+			margin-bottom: 20px;
+		}
+		/* .documents-form__row--2-columns */
+		&--2-columns {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+			@media (max-width: 48em) {
+				grid-template-columns: auto;
+				gap: 20px;
+			}
+		}
+		/* .documents-form__row--controls */
+		&--controls {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 20px;
+			padding-top: 40px;
+			@media (max-width: 48em) {
+				flex-direction: column-reverse;
+				justify-content: center;
+				padding-top: 20px;
+				gap: 10px;
+			}
+		}
+	}
+	/* .documents-form__column */
+	&__column {
+	}
+	&__navigation {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+	}
+}

@@ -10,14 +10,11 @@ export const replaceCountryIconPath = (values: OrderResponseData[]): OrderRespon
 
 	const result = values.map((item) => ({
 		...item,
-		data: {
-			...item.data,
-			generalInformation: {
-				...item.data.generalInformation,
-				country: {
-					...item.data.generalInformation.country,
-					icon: ICONS[item.data.generalInformation.country.label],
-				},
+		generalInformation: {
+			...item.generalInformation,
+			country: {
+				...item.generalInformation.country,
+				icon: ICONS[item.generalInformation.country.label],
 			},
 		},
 	}));

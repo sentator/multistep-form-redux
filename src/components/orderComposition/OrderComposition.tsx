@@ -1,3 +1,4 @@
+import React from "react";
 import { FieldArray } from "formik";
 import { v4 as uuidv4 } from "uuid";
 
@@ -33,6 +34,7 @@ const OrderComposition: React.FC<OrderCompositionProps> = (props) => {
 											isClearBtnVisible={itemsInOrder > 1}
 											removeItem={() => remove(index)}
 											currencySymbol={currencySymbol}
+											initialPriceValue={field.totalPrice || 0}
 										/>
 									</li>
 								))}

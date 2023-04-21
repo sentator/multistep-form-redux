@@ -9,10 +9,11 @@ interface InputProps {
 	placeholder?: string;
 	label?: string;
 	tooltip?: string;
+	readOnly?: boolean;
 }
 
 const Input = (props: InputProps) => {
-	const { name, id, placeholder = "", label, tooltip } = props;
+	const { name, id, placeholder = "", label, tooltip, readOnly = false } = props;
 	const [field, meta] = useField(name);
 
 	return (
@@ -35,6 +36,8 @@ const Input = (props: InputProps) => {
 					placeholder={placeholder}
 					id={id}
 					data-error={meta.touched && !!meta.error}
+					readOnly={readOnly}
+					data-readonly={readOnly}
 				/>
 			</div>
 			{meta.touched && meta.error ? <p className="controlled-input__error">{meta.error}</p> : null}

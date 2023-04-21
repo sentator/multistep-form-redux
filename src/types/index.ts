@@ -5,6 +5,7 @@ import {
 	DeliveryFormState,
 	StepperBarItem,
 } from "./deliveryForm";
+import { EditOrderStepDocumentsValues, EditOrderFormState } from "./editOrderForm";
 
 interface OptionItem {
 	id: string;
@@ -26,9 +27,10 @@ interface CurrencyRate {
 	gbp: { rate: number };
 }
 
-interface OrderProgressStatusItem {
+export interface OrderProgressStatusItem {
+	id?: string;
 	label: OrderProgressStatusLabel;
-	status: string;
+	name: string;
 	createdAt: string;
 }
 
@@ -41,42 +43,38 @@ export enum OrderProgressStatusLabel {
 
 interface OrderResponseData {
 	_id: string;
-	data: {
-		generalInformation: {
-			country: OptionItem;
-			shop: OptionItem;
-			parcelName: string;
-			orderComposition: ProductItem[];
-			customsFees: [{ value: boolean }];
-			promocode: string;
-			trackNumber: string;
-		};
-		documents?: {
-			invoice: UploadedFile[];
-			lastName: string;
-			firstName: string;
-			patronymicName: string;
-			passport: string;
-			birthDate: Date;
-			passportIssueDate: Date;
-			passportIssuedBy: string;
-			registrationAddress: string;
-			identificationNumber: string;
-		};
-		address: {
-			deliveryAddress: string;
-			phoneNumber: string;
-		};
-		progress: OrderProgressStatusItem[];
+	generalInformation: {
+		country: OptionItem;
+		shop: OptionItem;
+		parcelName: string;
+		orderComposition: ProductItem[];
+		customsFees: [{ value: boolean }];
+		promocode: string;
+		trackNumber: string;
+	};
+	documents?: {
+		invoice: UploadedFile[];
+		lastName: string;
+		firstName: string;
+		patronymicName: string;
+		passport: string;
+		birthDate: Date;
+		passportIssueDate: Date;
+		passportIssuedBy: string;
+		registrationAddress: string;
+		identificationNumber: string;
+	};
+	address: {
+		deliveryAddress: string;
+		phoneNumber: string;
 	};
 	createdAt: string;
 	updatedAt: string;
 	progress: OrderProgressStatusItem[];
+	status: OrderProgressStatusItem;
 }
 
-interface OrderSendData extends Omit<DeliveryFormState, "documents">, Partial<Pick<DeliveryFormState, "documents">> {
-	progress: OrderProgressStatusItem[];
-}
+interface OrderSendData extends Omit<DeliveryFormState, "documents">, Partial<Pick<DeliveryFormState, "documents">> {}
 
 interface UploadedFile {
 	originalName: string;
@@ -94,7 +92,7 @@ interface OrdersTableData {
 	totalPrice: string;
 	promocode: string;
 	trackNumber: string;
-	progress: OrderProgressStatusItem[];
+	status: OrderProgressStatusItem;
 	subRows: Omit<OrdersTableData, "_id" | "progress">[] | null;
 }
 
@@ -106,6 +104,8 @@ export type {
 	StepDocumentsValues,
 	StepAddressValues,
 	DeliveryFormState,
+	EditOrderStepDocumentsValues,
+	EditOrderFormState,
 	StepperBarItem,
 	OrderResponseData,
 	OrderSendData,

@@ -41,6 +41,12 @@ export const Autocomplete = <Option extends OptionItem>(props: AutocompleteProps
 						setValue(value || null);
 					}}
 					onBlur={field.onBlur}
+					isOptionEqualToValue={(option, value) => option.id === value.id}
+					// isOptionEqualToValue={(option, value) => {
+					// 	console.log(option.name, value.name);
+					// 	return option.name === value.name;
+					// }}
+					getOptionDisabled={(option) => !!option.disabled}
 					renderInput={(params) => (
 						<TextField
 							{...params}

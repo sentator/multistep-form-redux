@@ -38,6 +38,10 @@
 			outline-offset: -2px;
 			border-color: transparent;
 		}
+		&[data-readonly="true"] {
+			pointer-events: none;
+			opacity: 0.5;
+		}
 		&[data-error="true"] {
 			border-color: var(--mainRedColor);
 		}

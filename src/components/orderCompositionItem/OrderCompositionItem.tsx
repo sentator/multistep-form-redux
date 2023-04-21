@@ -1,6 +1,5 @@
 import React from "react";
 
-import { deliveryFormContext } from "../../context";
 import Input from "../input/Input";
 import InputCounter from "../inputCounter/InputCounter";
 import InputPrice from "../inputPrice/InputPrice";
@@ -13,17 +12,11 @@ interface OrderCompositionItemProps {
 	isClearBtnVisible: boolean;
 	removeItem: () => void;
 	currencySymbol?: string;
+	initialPriceValue: number;
 }
 
 const OrderCompositionItem: React.FC<OrderCompositionItemProps> = (props) => {
-	const { index, name, isClearBtnVisible, removeItem, currencySymbol } = props;
-	const {
-		formState: {
-			generalInformation: { orderComposition },
-		},
-	} = React.useContext(deliveryFormContext);
-
-	const initialPriceValue = orderComposition[index] ? orderComposition[index].totalPrice : 0;
+	const { index, name, isClearBtnVisible, removeItem, currencySymbol, initialPriceValue } = props;
 
 	return (
 		<div className="fields-product">

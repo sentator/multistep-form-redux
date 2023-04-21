@@ -69,24 +69,20 @@ const useOrdersTableColumns = () => {
 					{
 						id: "status",
 						Header: "Статус",
-						accessor: "progress",
+						accessor: "status",
 						Cell: (value: any) => {
-							const progress = value.cell.row.original.progress;
-							if (progress && Array.isArray(progress) && progress.length) {
-								const { status, createdAt } = progress[progress.length - 1];
-								const formattedDate = Boolean(createdAt)
-									? formatDateForOrderStatus(new Date(createdAt))
-									: "";
-								const cellValue = (
-									<>
-										<span>{status}</span>
-										<br />
-										<span>{formattedDate}</span>
-									</>
-								);
-								return cellValue;
-							}
-							return "Застарілий формат";
+							const status = value.cell.row.original.status;
+							const formattedDate = Boolean(status.createdAt)
+								? formatDateForOrderStatus(new Date(status.createdAt))
+								: "";
+							const cellValue = (
+								<>
+									<span>{status.name}</span>
+									<br />
+									<span>{formattedDate}</span>
+								</>
+							);
+							return cellValue;
 						},
 					},
 					{
@@ -99,7 +95,7 @@ const useOrdersTableColumns = () => {
 								<Button
 									type="button"
 									title="Редагувати"
-									onClick={() => navigate(`/user/orders/${id}`)}
+									onClick={() => navigate(`/user/orders/${id}/general-information`)}
 								/>
 							) : (
 								""

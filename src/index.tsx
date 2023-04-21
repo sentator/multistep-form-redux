@@ -3,7 +3,7 @@ import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import App from "./App";
-import { DeliveryFormContextProvider, MuiThemeProvider } from "./context";
+import { CreateOrderFormContextProvider, EditOrderFormContextProvider, MuiThemeProvider } from "./context";
 import store from "./store";
 
 import "./index.scss";
@@ -12,11 +12,13 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
 	<HashRouter>
 		<Provider store={store}>
-			<DeliveryFormContextProvider>
-				<MuiThemeProvider>
-					<App />
-				</MuiThemeProvider>
-			</DeliveryFormContextProvider>
+			<CreateOrderFormContextProvider>
+				<EditOrderFormContextProvider>
+					<MuiThemeProvider>
+						<App />
+					</MuiThemeProvider>
+				</EditOrderFormContextProvider>
+			</CreateOrderFormContextProvider>
 		</Provider>
 	</HashRouter>
 );

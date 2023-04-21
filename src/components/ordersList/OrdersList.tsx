@@ -16,9 +16,9 @@ const OrdersList: React.FC<OrdersListProps> = ({ items }) => {
 				{items.map((item) => (
 					<div className="orders-list__item" key={item._id}>
 						<OrdersListItem
-							countryLabel={item.data.generalInformation.country.label}
-							parcelName={item.data.generalInformation.parcelName}
-							trackNumber={item.data.generalInformation.trackNumber}
+							countryLabel={item.generalInformation.country.label}
+							parcelName={item.generalInformation.parcelName}
+							trackNumber={item.generalInformation.trackNumber}
 						/>
 					</div>
 				))}

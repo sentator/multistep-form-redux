@@ -1,8 +1,17 @@
 import { OrderResponseData } from "../../types";
-import { GetOrdersAction, GetOrdersActionSuccess, CreateOrderAction, CreateOrderActionSuccess } from "./actionTypes";
+import {
+	GetOrdersActionSuccess,
+	CreateOrderActionSuccess,
+	UpdateOrderActionSuccess,
+	UpdateOrderStatusActionSuccess,
+} from "./actionTypes";
 
 export interface OrdersState {
 	orders: OrderResponseData[];
 }
 
-export type OrdersActions = GetOrdersAction | GetOrdersActionSuccess | CreateOrderAction | CreateOrderActionSuccess;
+export type OrdersActions =
+	| GetOrdersActionSuccess
+	| CreateOrderActionSuccess
+	| UpdateOrderActionSuccess
+	| UpdateOrderStatusActionSuccess;

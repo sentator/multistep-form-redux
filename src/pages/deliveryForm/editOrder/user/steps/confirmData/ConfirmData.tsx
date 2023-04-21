@@ -1,46 +1,45 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { OrderProgressStatusLabel, StepperBarItem } from "../../../../types";
-import { deliveryFormContext } from "../../../../context";
-import { useActionAsync } from "../../../../store/action.hook";
-import StepperBar from "../../../../components/stepperBar/StepperBar";
-import NavigationLink from "../../../../components/navigationLink/NavigationLink";
-import Button from "../../../../components/button/Button";
-import { createOrder as createOrderAction } from "../../../../store/orders/actions";
+import { StepperBarItem } from "../../../../../../types";
+import { editOrderFormContext } from "../../../../../../context";
+import { useActionAsync } from "../../../../../../store/action.hook";
+import StepperBar from "../../../../../../components/stepperBar/StepperBar";
+import NavigationLink from "../../../../../../components/navigationLink/NavigationLink";
+import Button from "../../../../../../components/button/Button";
+import { updateOrder as updateOrderAction } from "../../../../../../store/orders/actions";
 
 import "./confirmData.scss";
 
 const ConfirmData = () => {
-	const { isDocumentsRequired, clearContextData, formState } = React.useContext(deliveryFormContext);
+	const { isDocumentsRequired, clearContextData, formState } = React.useContext(editOrderFormContext);
+	const { orderId } = useParams<"orderId">();
 	const navigate = useNavigate();
-	const createOrder = useActionAsync(createOrderAction);
+	const updateOrder = useActionAsync(updateOrderAction);
 	const [isSending, setSending] = React.useState<boolean>(false);
 	const [error, setError] = React.useState<string | null>(null);
 
+	if (!orderId) {
+		return <p>Не знайдено замовлення з таким id</p>;
+	}
+
 	const sendOrderData = async () => {
-		const progress = [
-			{
-				label: OrderProgressStatusLabel.PROCESSED,
-				status: "Заявка оброблена",
-				createdAt: new Date(Date.now()).toISOString(),
-			},
-		];
 		const order = isDocumentsRequired
 			? {
-					...formState,
-					progress,
+					generalInformation: formState.generalInformation,
+					documents: formState.documents,
+					address: formState.address,
 			  }
 			: {
 					generalInformation: formState.generalInformation,
 					address: formState.address,
-					progress,
 			  };
 
 		try {
 			setSending(true);
 
-			await createOrder({ order });
+			// @ts-ignore
+			await updateOrder({ order, orderId });
 			clearContextData();
 			navigate("/");
 		} catch (e) {
@@ -51,15 +50,28 @@ const ConfirmData = () => {
 		}
 	};
 
+	const cancelEditing = () => {
+		clearContextData();
+		navigate("/");
+	};
+
 	const steps: StepperBarItem[] = isDocumentsRequired
 		? [
-				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
-				{ title: "Документи", status: "completed", url: "/new-order/documents" },
-				{ title: "Адреса отримання", status: "completed", url: "/new-order/address" },
+				{
+					title: "Інформація про відправлення",
+					status: "completed",
+					url: `/user/orders/${orderId}/general-information`,
+				},
+				{ title: "Документи", status: "completed", url: `/user/orders/${orderId}/documents` },
+				{ title: "Адреса отримання", status: "completed", url: `/user/orders/${orderId}/address` },
 		  ]
 		: [
-				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
-				{ title: "Адреса отримання", status: "completed", url: "/new-order/address" },
+				{
+					title: "Інформація про відправлення",
+					status: "completed",
+					url: `/user/orders/${orderId}/general-information`,
+				},
+				{ title: "Адреса отримання", status: "completed", url: `/user/orders/${orderId}/address` },
 		  ];
 
 	return (
@@ -92,9 +104,9 @@ const ConfirmData = () => {
 				)}
 			</div>
 			<div className="page-confirmation__footer">
-				<Button title="Скасувати" type="button" onClick={() => navigate("/")} />
+				<Button title="Скасувати" type="button" onClick={cancelEditing} />
 				<div className="page-confirmation__navigation">
-					<NavigationLink to="/new-order/address" title="Редагувати форму" />
+					<NavigationLink to={`/user/orders/${orderId}/address`} title="Назад" />
 					<Button title="Відправити" onClick={sendOrderData} disabled={isSending || !!error} />
 				</div>
 			</div>

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
-import { StepGeneralInformationValues } from "../../types";
-import { deliveryFormContext } from "../../context";
+import { StepGeneralInformationValues } from "../../../types";
+import { createOrderFormContext } from "../../../context";
 import GeneralInformation from "./steps/generalInformation/GeneralInformation";
 
 const GeneralInformationWrapper: React.FC = () => {
@@ -14,7 +14,7 @@ const GeneralInformationWrapper: React.FC = () => {
 		isDocumentsRequired,
 		addStepDocuments,
 		removeStepDocuments,
-	} = React.useContext(deliveryFormContext);
+	} = React.useContext(createOrderFormContext);
 	const navigate = useNavigate();
 
 	const validationSchema = Yup.object().shape({
