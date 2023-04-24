@@ -1,6 +1,7 @@
 import React from "react";
 import { useField } from "formik";
 
+import { transformFileList } from "../../utils";
 import InputFile from "../inputFile/InputFile";
 import AttachedFilesList from "../attachedFilesList/AttachedFilesList";
 
@@ -14,12 +15,22 @@ interface AttachInvoiceProps {
 }
 
 const AttachInvoice: React.FC<AttachInvoiceProps> = ({ name, id, initialValue, acceptedFormats }) => {
-	const [_, __, { setValue }] = useField(name);
+	const [field, _, { setValue }] = useField(name);
 	const [attachedFiles, setAttachedFiles] = React.useState(initialValue);
 
-	const replaceAttachedFiles = (value: File[] | null) => {
-		setAttachedFiles(value);
-		setValue(value, true);
+	const attachFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const attachedFiles = transformFileList(event.target.files);
+
+		const existingFiles = field.value ? (field.value as File[]) : [];
+		const newFiles = attachedFiles.filter((file) => {
+			return !existingFiles.some(
+				(existingFile) => existingFile.name === file.name && existingFile.size === file.size
+			);
+		});
+
+		const result = [...existingFiles, ...newFiles];
+		setAttachedFiles(result);
+		setValue(result, true);
 	};
 
 	const removeAttachedFile = (index: number) => {
@@ -52,7 +63,7 @@ const AttachInvoice: React.FC<AttachInvoiceProps> = ({ name, id, initialValue, a
 					id={id}
 					label="Завантажити файли"
 					acceptedFormats={acceptedFormats.join(", ")}
-					replaceAttachedFiles={replaceAttachedFiles}
+					addFiles={attachFiles}
 				/>
 			</div>
 			{!!attachedFiles && (

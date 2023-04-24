@@ -1,7 +1,5 @@
 import { useField } from "formik";
 
-import { transformFileList } from "../../utils";
-
 import "./inputFile.scss";
 
 interface InputFileProps {
@@ -9,17 +7,12 @@ interface InputFileProps {
 	id: string;
 	label: string;
 	acceptedFormats?: string;
-	replaceAttachedFiles: (value: File[] | null) => void;
+	addFiles: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputFile: React.FC<InputFileProps> = (props) => {
-	const { name, id, label, acceptedFormats, replaceAttachedFiles } = props;
+	const { name, id, label, acceptedFormats, addFiles } = props;
 	const [field, meta] = useField(name);
-
-	const attachFiles = (fileList: FileList | null) => {
-		const files = transformFileList(fileList);
-		replaceAttachedFiles(files);
-	};
 
 	return (
 		<div className="controlled-input-file">
@@ -33,7 +26,7 @@ const InputFile: React.FC<InputFileProps> = (props) => {
 					className="controlled-input-file__input visually-hidden"
 					id={id}
 					data-error={meta.touched && !!meta.error}
-					onChange={(e) => attachFiles(e.target.files)}
+					onChange={addFiles}
 				/>
 				<label className="controlled-input-file__label" htmlFor={id}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
