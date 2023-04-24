@@ -40,7 +40,7 @@ const Documents: React.FC = () => {
 	};
 
 	const validationSchema = Yup.object().shape({
-		// invoice: Yup.mixed().required("Файл рахунку-фактури є обов'язковим."),
+		invoice: Yup.mixed().required("Файл рахунку-фактури є обов'язковим."),
 		lastName: Yup.string()
 			.required("Значення не повинно бути пустим.")
 			.matches(/^[А-ЩЬЮЯҐЄІЇ-][а-щьюяґєії'-]*$/gi, {
@@ -92,14 +92,14 @@ const Documents: React.FC = () => {
 			<div className="documents-form__form">
 				<Formik initialValues={documents} validationSchema={validationSchema} onSubmit={submitStep}>
 					<Form className="documents-form">
-						{/* <div className="documents-form__invoice">
+						<div className="documents-form__invoice">
 							<AttachInvoice
 								name="invoice"
 								id="input_invoice"
 								initialValue={documents.invoice}
 								acceptedFormats={["image/jpeg", "image/png", "application/pdf"]}
 							/>
-						</div> */}
+						</div>
 						<div className="documents-form__row documents-form__row--2-columns">
 							<div className="documents-form__column">
 								<Input name="lastName" id="input_lastName" label="Прізвище (українською)" />

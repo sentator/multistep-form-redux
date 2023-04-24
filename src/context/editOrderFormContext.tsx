@@ -8,6 +8,7 @@ import {
 	EditOrderStepDocumentsValues,
 	OrderResponseData,
 	OrderProgressStatusLabel,
+	EditOrderResponseData,
 } from "../types";
 
 const FORM_DEFAULT_STATE: EditOrderFormState = {
@@ -52,7 +53,7 @@ interface EditOrderFormContext {
 	isDocumentsRequired: boolean;
 	addStepDocuments: () => void;
 	removeStepDocuments: () => void;
-	setInitialState: (data: OrderResponseData) => void;
+	setInitialState: (data: EditOrderResponseData) => void;
 }
 
 export const editOrderFormContext = React.createContext<EditOrderFormContext>({
@@ -99,7 +100,7 @@ const Context: React.FC<ContextProps> = ({ children }) => {
 		setDocumentsRequired(false);
 	};
 
-	const setInitialState = (data: OrderResponseData) => {
+	const setInitialState = (data: EditOrderResponseData) => {
 		const documents: EditOrderFormState["documents"] =
 			data.documents && data.documents.firstName
 				? {

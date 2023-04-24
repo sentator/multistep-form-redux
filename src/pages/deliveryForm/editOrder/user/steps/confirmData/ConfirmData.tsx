@@ -38,7 +38,6 @@ const ConfirmData = () => {
 		try {
 			setSending(true);
 
-			// @ts-ignore
 			await updateOrder({ order, orderId });
 			clearContextData();
 			navigate("/");

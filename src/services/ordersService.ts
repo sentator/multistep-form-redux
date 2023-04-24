@@ -66,16 +66,24 @@ export const createNewOrder = async (orderData: OrderSendData) => {
 };
 
 export const updateOrderData = async (orderId: string, orderData: OrderSendData) => {
+	const isDocumentsRequired = !!orderData.documents;
+
 	try {
-		const response = await apiClient.put<OrderResponseData>(
-			`/api/orders/${orderId}`,
-			JSON.stringify({ ...orderData }),
-			{
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
-		);
+		const uploadedFiles = await _sendFiles(orderData.documents?.invoice);
+
+		if (isDocumentsRequired && !uploadedFiles) {
+			throw new Error("Не прикріплено жодного файлу");
+		}
+
+		const data = isDocumentsRequired
+			? { ...orderData, documents: { ...orderData.documents, invoice: uploadedFiles } }
+			: orderData;
+
+		const response = await apiClient.put<OrderResponseData>(`/api/orders/${orderId}`, JSON.stringify(data), {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
 
 		return response.data;
 	} catch (error) {
@@ -108,3 +116,20 @@ export const updateOrderStatus = async (orderId: string, orderStatus: OrderProgr
 
 	return null;
 };
+
+// export const deleteFiles = async (files: UploadedFile[]) => {
+// 	const body = JSON.stringify(files);
+// 	try {
+// 		const response = await apiClient.post<{ deletedFiles: UploadedFile[] }>("/api/files/delete", body, {
+// 			headers: {
+// 				"Content-Type": "application/json",
+// 			},
+// 		});
+
+// 		return response.data.deletedFiles;
+// 	} catch (error) {
+// 		if (isAxiosError<{ deletedFiles: UploadedFile[] }>(error)) {
+// 			throw new Error("Сталася помилка при видаленні файлів");
+// 		}
+// 	}
+// };
