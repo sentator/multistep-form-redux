@@ -1,9 +1,9 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { DeliveryFormState, StepAddressValues, StepDocumentsValues, StepGeneralInformationValues } from "../types";
+import { CreateOrderFormState, StepAddressValues, StepDocumentsValues, StepGeneralInformationValues } from "../types";
 
-const FORM_DEFAULT_STATE: DeliveryFormState = {
+const FORM_DEFAULT_STATE: CreateOrderFormState = {
 	generalInformation: {
 		country: null,
 		shop: null,
@@ -32,7 +32,7 @@ const FORM_DEFAULT_STATE: DeliveryFormState = {
 };
 
 interface CreateOrderFormContext {
-	formState: DeliveryFormState;
+	formState: CreateOrderFormState;
 	updateGeneralInformation: (value: StepGeneralInformationValues) => void;
 	updateDocuments: (value: StepDocumentsValues) => void;
 	updateAddress: (value: StepAddressValues) => void;
@@ -58,7 +58,7 @@ interface ContextProps {
 }
 
 const Context: React.FC<ContextProps> = ({ children }) => {
-	const [formState, setFormState] = React.useState<DeliveryFormState>(FORM_DEFAULT_STATE);
+	const [formState, setFormState] = React.useState<CreateOrderFormState>(FORM_DEFAULT_STATE);
 	const [isDocumentsRequired, setDocumentsRequired] = React.useState<boolean>(false);
 
 	const updateGeneralInformation = (value: StepGeneralInformationValues) => {

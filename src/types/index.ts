@@ -2,9 +2,9 @@ import {
 	StepGeneralInformationValues,
 	StepDocumentsValues,
 	StepAddressValues,
-	DeliveryFormState,
+	CreateOrderFormState,
 	StepperBarItem,
-} from "./deliveryForm";
+} from "./createOrderForm";
 import { EditOrderStepDocumentsValues, EditOrderFormState } from "./editOrderForm";
 
 interface OptionItem {
@@ -74,7 +74,9 @@ interface OrderResponseData {
 	status: OrderProgressStatusItem;
 }
 
-interface OrderSendData extends Omit<DeliveryFormState, "documents">, Partial<Pick<DeliveryFormState, "documents">> {}
+interface OrderSendData
+	extends Omit<CreateOrderFormState, "documents">,
+		Partial<Pick<CreateOrderFormState, "documents">> {}
 
 interface UploadedFile {
 	originalName: string;
@@ -103,7 +105,7 @@ export type {
 	StepGeneralInformationValues,
 	StepDocumentsValues,
 	StepAddressValues,
-	DeliveryFormState,
+	CreateOrderFormState,
 	EditOrderStepDocumentsValues,
 	EditOrderFormState,
 	StepperBarItem,

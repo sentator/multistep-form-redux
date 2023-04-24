@@ -26,7 +26,7 @@ export interface StepAddressValues {
 	phoneNumber: string;
 }
 
-export interface DeliveryFormState {
+export interface CreateOrderFormState {
 	generalInformation: StepGeneralInformationValues;
 	documents: StepDocumentsValues;
 	address: StepAddressValues;

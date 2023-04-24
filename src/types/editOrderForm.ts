@@ -1,4 +1,4 @@
-import { StepGeneralInformationValues, StepDocumentsValues, StepAddressValues } from "./deliveryForm";
+import { StepGeneralInformationValues, StepDocumentsValues, StepAddressValues } from "./createOrderForm";
 import { OrderProgressStatusItem, UploadedFile } from ".";
 
 export interface EditOrderStepDocumentsValues extends Omit<StepDocumentsValues, "invoice"> {
