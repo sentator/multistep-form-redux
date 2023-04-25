@@ -48,7 +48,9 @@ const GeneralInformationWrapper: React.FC = () => {
 				),
 			})
 		),
-		trackNumber: Yup.string().optional().min(6, "Значення занадто коротке. Повинно бути 6 символів або більше."),
+		trackNumber: Yup.string()
+			.required("Значення не повинно бути пустим.")
+			.min(6, "Значення занадто коротке. Повинно бути 6 символів або більше."),
 	});
 
 	const submitStep = (data: StepGeneralInformationValues) => {
