@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 
-import { OrderProgressStatusItem, OrderResponseData, OrderSendData, UploadedFile } from "../types";
+import { EditOrderSendData, OrderProgressStatusItem, OrderResponseData, OrderSendData, UploadedFile } from "../types";
 import { apiClient } from "../apiClient";
 import { replaceCountryIconPath } from "../utils";
 
@@ -36,6 +36,27 @@ const _sendFiles = async (files: File[] | null | undefined) => {
 	return null;
 };
 
+const _deleteFiles = async (files: UploadedFile[] | null | undefined) => {
+	if (files) {
+		const body = JSON.stringify(files);
+		try {
+			const response = await apiClient.post<{ deletedFiles: UploadedFile[] }>("/api/files/delete", body, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			return response.data.deletedFiles;
+		} catch (error) {
+			if (isAxiosError<{ deletedFiles: UploadedFile[] }>(error)) {
+				throw new Error("Сталася помилка при видаленні файлів");
+			}
+		}
+	}
+
+	return null;
+};
+
 export const createNewOrder = async (orderData: OrderSendData) => {
 	const isDocumentsRequired = !!orderData.documents;
 	const uploadedFiles = await _sendFiles(orderData.documents?.invoice);
@@ -58,18 +79,19 @@ export const createNewOrder = async (orderData: OrderSendData) => {
 		return response.data;
 	} catch (error) {
 		if (isAxiosError<OrderResponseData>(error)) {
-			throw new Error("Не вдалося відправити дані форми");
+			throw new Error("Не вдалося відправити форму");
 		}
 	}
 
 	return null;
 };
 
-export const updateOrderData = async (orderId: string, orderData: OrderSendData) => {
+export const updateOrderData = async (orderId: string, orderData: EditOrderSendData) => {
 	const isDocumentsRequired = !!orderData.documents;
 
 	try {
-		const uploadedFiles = await _sendFiles(orderData.documents?.invoice);
+		await _deleteFiles(orderData.documents?.invoiceSavedFiles);
+		const uploadedFiles = await _sendFiles(orderData.documents?.invoiceCurrentFiles);
 
 		if (isDocumentsRequired && !uploadedFiles) {
 			throw new Error("Не прикріплено жодного файлу");
@@ -88,7 +110,7 @@ export const updateOrderData = async (orderId: string, orderData: OrderSendData)
 		return response.data;
 	} catch (error) {
 		if (isAxiosError<OrderResponseData>(error)) {
-			throw new Error("Не вдалося відправити дані форми");
+			throw new Error("Не вдалося відправити форму");
 		}
 	}
 
@@ -110,26 +132,9 @@ export const updateOrderStatus = async (orderId: string, orderStatus: OrderProgr
 		return response.data;
 	} catch (error) {
 		if (isAxiosError<OrderResponseData>(error)) {
-			throw new Error("Не вдалося відправити дані форми");
+			throw new Error("Не вдалося відправити форму");
 		}
 	}
 
 	return null;
 };
-
-// export const deleteFiles = async (files: UploadedFile[]) => {
-// 	const body = JSON.stringify(files);
-// 	try {
-// 		const response = await apiClient.post<{ deletedFiles: UploadedFile[] }>("/api/files/delete", body, {
-// 			headers: {
-// 				"Content-Type": "application/json",
-// 			},
-// 		});
-
-// 		return response.data.deletedFiles;
-// 	} catch (error) {
-// 		if (isAxiosError<{ deletedFiles: UploadedFile[] }>(error)) {
-// 			throw new Error("Сталася помилка при видаленні файлів");
-// 		}
-// 	}
-// };

@@ -6,7 +6,6 @@ import {
 	StepGeneralInformationValues,
 	EditOrderFormState,
 	EditOrderStepDocumentsValues,
-	OrderResponseData,
 	OrderProgressStatusLabel,
 	EditOrderResponseData,
 } from "../types";
@@ -22,7 +21,7 @@ const FORM_DEFAULT_STATE: EditOrderFormState = {
 		trackNumber: "",
 	},
 	documents: {
-		invoice: null,
+		invoiceCurrentFiles: null,
 		lastName: "",
 		firstName: "",
 		patronymicName: "",

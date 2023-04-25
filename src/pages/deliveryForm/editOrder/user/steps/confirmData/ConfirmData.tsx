@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { StepperBarItem } from "../../../../../../types";
+import { EditOrderSendData, StepperBarItem } from "../../../../../../types";
 import { editOrderFormContext } from "../../../../../../context";
 import { useActionAsync } from "../../../../../../store/action.hook";
 import StepperBar from "../../../../../../components/stepperBar/StepperBar";
@@ -24,7 +24,7 @@ const ConfirmData = () => {
 	}
 
 	const sendOrderData = async () => {
-		const order = isDocumentsRequired
+		const order: EditOrderSendData = isDocumentsRequired
 			? {
 					generalInformation: formState.generalInformation,
 					documents: formState.documents,

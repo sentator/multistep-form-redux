@@ -31,7 +31,14 @@ const CreateOrderForm: React.FC = () => {
 		try {
 			const invoiceFiles = invoiceItems?.length ? await getInvoiceFiles(invoiceItems) : null;
 			const modifiedOrder: EditOrderResponseData = order.documents
-				? { ...order, documents: { ...order.documents, invoice: invoiceFiles } }
+				? {
+						...order,
+						documents: {
+							...order.documents,
+							invoiceCurrentFiles: invoiceFiles,
+							invoiceSavedFiles: invoiceItems,
+						},
+				  }
 				: { ...order, documents: undefined };
 
 			setInitialState(modifiedOrder);

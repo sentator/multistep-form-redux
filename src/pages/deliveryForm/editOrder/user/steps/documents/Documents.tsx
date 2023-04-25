@@ -40,7 +40,7 @@ const Documents: React.FC = () => {
 	};
 
 	const validationSchema = Yup.object().shape({
-		invoice: Yup.mixed().required("Файл рахунку-фактури є обов'язковим."),
+		invoiceCurrentFiles: Yup.mixed().required("Файл рахунку-фактури є обов'язковим."),
 		lastName: Yup.string()
 			.required("Значення не повинно бути пустим.")
 			.matches(/^[А-ЩЬЮЯҐЄІЇ-][а-щьюяґєії'-]*$/gi, {
@@ -94,9 +94,9 @@ const Documents: React.FC = () => {
 					<Form className="documents-form">
 						<div className="documents-form__invoice">
 							<AttachInvoice
-								name="invoice"
+								name="invoiceCurrentFiles"
 								id="input_invoice"
-								initialValue={documents.invoice}
+								initialValue={documents.invoiceCurrentFiles}
 								acceptedFormats={["image/jpeg", "image/png", "application/pdf"]}
 							/>
 						</div>

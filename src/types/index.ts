@@ -5,7 +5,12 @@ import {
 	CreateOrderFormState,
 	StepperBarItem,
 } from "./createOrderForm";
-import { EditOrderStepDocumentsValues, EditOrderFormState, EditOrderResponseData } from "./editOrderForm";
+import {
+	EditOrderStepDocumentsValues,
+	EditOrderFormState,
+	EditOrderResponseData,
+	EditOrderSendData,
+} from "./editOrderForm";
 
 interface OptionItem {
 	id: string;
@@ -109,6 +114,7 @@ export type {
 	EditOrderStepDocumentsValues,
 	EditOrderFormState,
 	EditOrderResponseData,
+	EditOrderSendData,
 	StepperBarItem,
 	OrderResponseData,
 	OrderSendData,

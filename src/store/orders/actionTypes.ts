@@ -1,4 +1,4 @@
-import { OrderResponseData, OrderSendData, OrderProgressStatusItem } from "../../types";
+import { OrderResponseData, OrderSendData, OrderProgressStatusItem, EditOrderSendData } from "../../types";
 import { Action } from "../actionHelpers";
 
 export enum OrderActionTypes {
@@ -44,7 +44,7 @@ export type UpdateOrderAction = Action<
 	typeof OrderActionTypes.UPDATE_ORDER_REQUEST,
 	{
 		orderId: string;
-		order: OrderSendData;
+		order: EditOrderSendData;
 	}
 >;
 export type UpdateOrderActionSuccess = Action<

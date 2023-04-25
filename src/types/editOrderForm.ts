@@ -2,7 +2,8 @@ import { StepGeneralInformationValues, StepDocumentsValues, StepAddressValues } 
 import { OptionItem, OrderProgressStatusItem, ProductItem, UploadedFile } from ".";
 
 export interface EditOrderStepDocumentsValues extends Omit<StepDocumentsValues, "invoice"> {
-	invoice: File[] | null;
+	invoiceCurrentFiles: File[] | null;
+	invoiceSavedFiles?: UploadedFile[];
 }
 
 export interface EditOrderFormState {
@@ -24,7 +25,8 @@ export interface EditOrderResponseData {
 		trackNumber: string;
 	};
 	documents?: {
-		invoice: File[] | null;
+		invoiceCurrentFiles: File[] | null;
+		invoiceSavedFiles: UploadedFile[] | undefined;
 		lastName: string;
 		firstName: string;
 		patronymicName: string;
@@ -44,3 +46,7 @@ export interface EditOrderResponseData {
 	progress: OrderProgressStatusItem[];
 	status: OrderProgressStatusItem;
 }
+
+export interface EditOrderSendData
+	extends Omit<EditOrderFormState, "documents" | "status">,
+		Partial<Pick<EditOrderFormState, "documents">> {}
