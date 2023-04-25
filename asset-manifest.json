@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/multistep-form-redux/static/css/main.ef778d88.css",
-    "main.js": "/multistep-form-redux/static/js/main.8da24a30.js",
+    "main.css": "/multistep-form-redux/static/css/main.49ee580e.css",
+    "main.js": "/multistep-form-redux/static/js/main.60a3e231.js",
     "static/media/Inter-Medium.woff2": "/multistep-form-redux/static/media/Inter-Medium.aad19453767e5305b7b5.woff2",
     "static/media/Inter-Regular.woff2": "/multistep-form-redux/static/media/Inter-Regular.f985216ffbdce15f6f87.woff2",
     "static/media/NovaPoshta-Medium.woff2": "/multistep-form-redux/static/media/NovaPoshta-Medium.08d01b68789016d17ff4.woff2",
@@ -18,11 +18,11 @@
     "static/media/fr.svg": "/multistep-form-redux/static/media/fr.588a0cd7ccd7691145764e778884d2d4.svg",
     "static/media/it.svg": "/multistep-form-redux/static/media/it.cae803612e85a5203c2b7a7582e1c6d8.svg",
     "static/media/pl.svg": "/multistep-form-redux/static/media/pl.2030bdad05ffc87969b728f46389b4f5.svg",
-    "main.ef778d88.css.map": "/multistep-form-redux/static/css/main.ef778d88.css.map",
-    "main.8da24a30.js.map": "/multistep-form-redux/static/js/main.8da24a30.js.map"
+    "main.49ee580e.css.map": "/multistep-form-redux/static/css/main.49ee580e.css.map",
+    "main.60a3e231.js.map": "/multistep-form-redux/static/js/main.60a3e231.js.map"
   },
   "entrypoints": [
-    "static/css/main.ef778d88.css",
-    "static/js/main.8da24a30.js"
+    "static/css/main.49ee580e.css",
+    "static/js/main.60a3e231.js"
   ]
 }
