@@ -29,6 +29,7 @@ export enum OrderActionTypes {
 	GET_ORDER_FILES_FAIL = "GET_ORDER_FILES_FAIL",
 
 	REPLACE_ORDER_FILES_ITEM = "REPLACE_ORDER_FILES_ITEM",
+	REMOVE_ORDER_FILES_ITEM = "REMOVE_ORDER_FILES_ITEM",
 }
 
 export type GetOrdersAction = Action<typeof OrderActionTypes.FETCH_ORDERS_REQUEST>;
@@ -57,6 +58,7 @@ export type UpdateOrderAction = Action<
 	{
 		orderId: string;
 		order: Omit<EditOrderFormState, "status">;
+		isDocumentsRequired: boolean;
 		filesToDelete?: UploadedFile[];
 	}
 >;
@@ -104,5 +106,11 @@ export type ReplaceOrderFilesItem = Action<
 			orderId: string;
 			files: File[];
 		};
+	}
+>;
+export type RemoveOrderFilesItem = Action<
+	typeof OrderActionTypes.REMOVE_ORDER_FILES_ITEM,
+	{
+		orderId: string;
 	}
 >;

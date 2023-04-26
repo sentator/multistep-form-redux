@@ -16,6 +16,7 @@ import {
 	updateOrderStatusSuccess,
 	getOrderFilesSuccess,
 	replaceOrderFilesItem,
+	removeOrderFilesItem,
 } from "./actions";
 import {
 	fetchOrders,
@@ -94,23 +95,21 @@ function* updateOrderWorker({
 	meta,
 }: UpdateOrderAction & { meta: { resolve: (value: OrderResponseData) => void; reject: (reason?: unknown) => void } }) {
 	try {
-		const isDocumentsRequired = !!payload.order.documents.invoice;
-
 		// remove saved files from on the server
-		yield isDocumentsRequired ? call(deleteFiles, payload.filesToDelete) : null;
+		yield payload.isDocumentsRequired ? call(deleteFiles, payload.filesToDelete) : null;
 
 		// upload new files to the server
-		const uploadedFiles: UploadedFile[] | null = isDocumentsRequired
+		const uploadedFiles: UploadedFile[] | null = payload.isDocumentsRequired
 			? yield call(sendFiles, payload.order.documents.invoice)
 			: null;
 
-		if (isDocumentsRequired && !uploadedFiles) {
+		if (payload.isDocumentsRequired && !uploadedFiles) {
 			throw new Error("Не прикріплено жодного файлу");
 		}
 
 		// prepare order data for sending to the server
 		const orderData: EditOrderSendData =
-			isDocumentsRequired && uploadedFiles
+			payload.isDocumentsRequired && uploadedFiles
 				? {
 						...payload.order,
 						documents: {
@@ -120,15 +119,15 @@ function* updateOrderWorker({
 							passportIssueDate: payload.order.documents.passportIssueDate?.toISOString() ?? "",
 						},
 				  }
-				: { ...payload.order, documents: undefined };
+				: { ...payload.order, documents: {} };
 
 		// upload new order data on the server
 		const response: OrderResponseData = yield call(updateOrderData, payload.orderId, orderData);
 
-		// replace fileItems in store if there were any changes
-		yield payload.order.documents.invoice
+		// replace orderFilesItem in store if documents are required. Otherwise, remove orderFilesItem from the store
+		yield payload.isDocumentsRequired && !!payload.order.documents.invoice
 			? put(replaceOrderFilesItem({ item: { orderId: payload.orderId, files: payload.order.documents.invoice } }))
-			: null;
+			: put(removeOrderFilesItem({ orderId: payload.orderId }));
 
 		meta.resolve(response);
 		yield put(updateOrderSuccess({ order: response }));

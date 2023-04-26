@@ -50,6 +50,11 @@ const reducer = (state = initialState, action: OrdersActions): OrdersState => {
 					return filesItem;
 				}),
 			};
+		case OrderActionTypes.REMOVE_ORDER_FILES_ITEM:
+			return {
+				...state,
+				files: state.files.filter((filesItem) => filesItem.orderId !== action.payload.orderId),
+			};
 		default:
 			return state;
 	}

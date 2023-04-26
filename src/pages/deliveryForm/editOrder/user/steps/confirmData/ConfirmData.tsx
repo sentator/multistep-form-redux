@@ -34,7 +34,7 @@ const ConfirmData = () => {
 		try {
 			setSending(true);
 
-			await updateOrder({ order: restOrderState, orderId, filesToDelete });
+			await updateOrder({ order: restOrderState, orderId, isDocumentsRequired, filesToDelete });
 			clearContextData();
 			navigate("/");
 		} catch (e) {

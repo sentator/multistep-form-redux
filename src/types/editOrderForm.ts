@@ -42,16 +42,18 @@ export interface EditOrderResponseData {
 }
 
 export interface EditOrderSendData extends Omit<EditOrderFormState, "documents" | "status"> {
-	documents?: {
-		invoice: UploadedFile[];
-		lastName: string;
-		firstName: string;
-		patronymicName: string;
-		passport: string;
-		birthDate: string;
-		passportIssueDate: string;
-		passportIssuedBy: string;
-		registrationAddress: string;
-		identificationNumber: string;
-	};
+	documents:
+		| {
+				invoice: UploadedFile[];
+				lastName: string;
+				firstName: string;
+				patronymicName: string;
+				passport: string;
+				birthDate: string;
+				passportIssueDate: string;
+				passportIssuedBy: string;
+				registrationAddress: string;
+				identificationNumber: string;
+		  }
+		| {};
 }

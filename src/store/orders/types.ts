@@ -6,6 +6,7 @@ import {
 	UpdateOrderStatusActionSuccess,
 	GetOrderFilesActionSuccess,
 	ReplaceOrderFilesItem,
+	RemoveOrderFilesItem,
 } from "./actionTypes";
 
 export interface OrdersState {
@@ -19,4 +20,5 @@ export type OrdersActions =
 	| UpdateOrderActionSuccess
 	| UpdateOrderStatusActionSuccess
 	| GetOrderFilesActionSuccess
-	| ReplaceOrderFilesItem;
+	| ReplaceOrderFilesItem
+	| RemoveOrderFilesItem;
