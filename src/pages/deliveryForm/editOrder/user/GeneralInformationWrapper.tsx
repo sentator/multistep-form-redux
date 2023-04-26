@@ -4,7 +4,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import { StepGeneralInformationValues } from "../../../../types";
-import { editOrderFormContext } from "../../../../context";
+import { orderFormContext } from "../../../../context";
 import GeneralInformation from "./steps/generalInformation/GeneralInformation";
 
 const GeneralInformationWrapper: React.FC = () => {
@@ -15,7 +15,7 @@ const GeneralInformationWrapper: React.FC = () => {
 		addStepDocuments,
 		removeStepDocuments,
 		clearContextData,
-	} = React.useContext(editOrderFormContext);
+	} = React.useContext(orderFormContext);
 	const { orderId } = useParams<"orderId">();
 	const navigate = useNavigate();
 

@@ -2,10 +2,12 @@ import {
 	StepGeneralInformationValues,
 	StepDocumentsValues,
 	StepAddressValues,
-	CreateOrderFormState,
 	StepperBarItem,
-} from "./createOrderForm";
-import { EditOrderFormState, EditOrderResponseData, EditOrderSendData } from "./editOrderForm";
+	OrderFormState,
+	OrderResponseData,
+	OrderResponseDataWithFiles,
+	OrderSendData,
+} from "./orderForm";
 
 interface OptionItem {
 	id: string;
@@ -41,54 +43,6 @@ export enum OrderProgressStatusLabel {
 	DEPARTMENT = "DEPARTMENT",
 }
 
-interface OrderResponseData {
-	_id: string;
-	generalInformation: {
-		country: OptionItem;
-		shop: OptionItem;
-		parcelName: string;
-		orderComposition: ProductItem[];
-		customsFees: [{ value: boolean }];
-		promocode: string;
-		trackNumber: string;
-	};
-	documents?: {
-		invoice: UploadedFile[];
-		lastName: string;
-		firstName: string;
-		patronymicName: string;
-		passport: string;
-		birthDate: Date;
-		passportIssueDate: Date;
-		passportIssuedBy: string;
-		registrationAddress: string;
-		identificationNumber: string;
-	};
-	address: {
-		deliveryAddress: string;
-		phoneNumber: string;
-	};
-	createdAt: string;
-	updatedAt: string;
-	progress: OrderProgressStatusItem[];
-	status: OrderProgressStatusItem;
-}
-
-interface OrderSendData extends Omit<CreateOrderFormState, "documents"> {
-	documents?: {
-		invoice: UploadedFile[];
-		lastName: string;
-		firstName: string;
-		patronymicName: string;
-		passport: string;
-		birthDate: string;
-		passportIssueDate: string;
-		passportIssuedBy: string;
-		registrationAddress: string;
-		identificationNumber: string;
-	};
-}
-
 interface UploadedFile {
 	originalName: string;
 	fileName: string;
@@ -121,12 +75,10 @@ export type {
 	StepGeneralInformationValues,
 	StepDocumentsValues,
 	StepAddressValues,
-	CreateOrderFormState,
-	EditOrderFormState,
-	EditOrderResponseData,
-	EditOrderSendData,
 	StepperBarItem,
+	OrderFormState,
 	OrderResponseData,
+	OrderResponseDataWithFiles,
 	OrderSendData,
 	UploadedFile,
 	OrderFilesItem,

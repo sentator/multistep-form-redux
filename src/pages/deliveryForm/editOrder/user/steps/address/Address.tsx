@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { isValidPhoneNumber } from "libphonenumber-js";
 
 import { StepAddressValues, StepperBarItem, OrderProgressStatusLabel } from "../../../../../../types";
-import { editOrderFormContext } from "../../../../../../context";
+import { orderFormContext } from "../../../../../../context";
 import StepperBar from "../../../../../../components/stepperBar/StepperBar";
 import Input from "../../../../../../components/input/Input";
 import InputPhone from "../../../../../../components/inputPhone/InputPhone";
@@ -21,7 +21,7 @@ const Address: React.FC = () => {
 		updateAddress,
 		isDocumentsRequired,
 		clearContextData,
-	} = React.useContext(editOrderFormContext);
+	} = React.useContext(orderFormContext);
 
 	const { orderId } = useParams<"orderId">();
 	const navigate = useNavigate();

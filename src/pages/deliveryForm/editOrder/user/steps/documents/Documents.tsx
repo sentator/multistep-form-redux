@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import { StepDocumentsValues, StepperBarItem } from "../../../../../../types";
-import { editOrderFormContext } from "../../../../../../context";
+import { orderFormContext } from "../../../../../../context";
 import AttachInvoice from "../../../../../../components/attachInvoice/AttachInvoice";
 import Input from "../../../../../../components/input/Input";
 import DatePicker from "../../../../../../components/datePicker/DatePicker";
@@ -20,7 +20,7 @@ const Documents: React.FC = () => {
 		formState: { documents },
 		updateDocuments,
 		clearContextData,
-	} = React.useContext(editOrderFormContext);
+	} = React.useContext(orderFormContext);
 
 	const { orderId } = useParams<"orderId">();
 	const navigate = useNavigate();

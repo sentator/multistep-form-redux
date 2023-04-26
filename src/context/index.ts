@@ -1,12 +1,5 @@
-import CreateOrderFormContextProvider, { createOrderFormContext } from "./createOrderFormContext";
-import EditOrderFormContextProvider, { editOrderFormContext } from "./editOrderFormContext";
+import OrderFormContextProvider, { orderFormContext } from "./orderFormContext";
 
 import MuiThemeProvider from "./MuiThemeProvider";
 
-export {
-	CreateOrderFormContextProvider,
-	createOrderFormContext,
-	EditOrderFormContextProvider,
-	editOrderFormContext,
-	MuiThemeProvider,
-};
+export { OrderFormContextProvider, orderFormContext, MuiThemeProvider };

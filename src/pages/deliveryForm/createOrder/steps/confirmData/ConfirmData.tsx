@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { StepperBarItem } from "../../../../../types";
-import { createOrderFormContext } from "../../../../../context";
+import { orderFormContext } from "../../../../../context";
 import { useActionAsync } from "../../../../../store/action.hook";
 import StepperBar from "../../../../../components/stepperBar/StepperBar";
 import NavigationLink from "../../../../../components/navigationLink/NavigationLink";
@@ -12,7 +12,7 @@ import { createOrder as createOrderAction } from "../../../../../store/orders/ac
 import "./confirmData.scss";
 
 const ConfirmData = () => {
-	const { isDocumentsRequired, clearContextData, formState } = React.useContext(createOrderFormContext);
+	const { isDocumentsRequired, clearContextData, formState } = React.useContext(orderFormContext);
 	const navigate = useNavigate();
 	const createOrder = useActionAsync(createOrderAction);
 	const [isSending, setSending] = React.useState<boolean>(false);

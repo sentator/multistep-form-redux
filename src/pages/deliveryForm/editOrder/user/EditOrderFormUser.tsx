@@ -2,14 +2,14 @@ import React from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { editOrderFormContext } from "../../../../context";
+import { orderFormContext } from "../../../../context";
 import { useActionAsync } from "../../../../store/action.hook";
 import { getOrderFiles as getOrderFilesAction } from "../../../../store/orders/actions";
 import { selectOrderById } from "../../../../store/orders/selectors";
 import { OrdersState } from "../../../../store/rootReducer";
 
 import "./editOrderFormUser.scss";
-import { EditOrderResponseData, OrderFilesItem, OrderResponseData, UploadedFile } from "../../../../types";
+import { OrderResponseDataWithFiles, OrderFilesItem, OrderResponseData, UploadedFile } from "../../../../types";
 
 const CreateOrderForm: React.FC = () => {
 	const { orderId } = useParams<"orderId">();
@@ -18,7 +18,7 @@ const CreateOrderForm: React.FC = () => {
 	const invoiceFiles = useSelector((state: OrdersState) =>
 		state.orders.files.find((item) => item.orderId === orderId)
 	);
-	const { setInitialState } = React.useContext(editOrderFormContext);
+	const { setInitialState } = React.useContext(orderFormContext);
 	const [isLoading, setLoading] = React.useState<boolean>(false);
 	const [error, setError] = React.useState<string | null>(null);
 
@@ -47,7 +47,7 @@ const CreateOrderForm: React.FC = () => {
 	};
 
 	const saveOrderToContext = (order: OrderResponseData, itemFiles?: OrderFilesItem) => {
-		const modifiedOrder: EditOrderResponseData =
+		const modifiedOrder: OrderResponseDataWithFiles =
 			order.documents && itemFiles
 				? {
 						...order,
@@ -57,7 +57,6 @@ const CreateOrderForm: React.FC = () => {
 						},
 				  }
 				: { ...order, documents: undefined };
-
 		setInitialState(modifiedOrder);
 	};
 

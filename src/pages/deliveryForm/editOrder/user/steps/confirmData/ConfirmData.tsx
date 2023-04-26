@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { StepperBarItem } from "../../../../../../types";
-import { editOrderFormContext } from "../../../../../../context";
+import { orderFormContext } from "../../../../../../context";
 import { useActionAsync } from "../../../../../../store/action.hook";
 import { updateOrder as updateOrderAction } from "../../../../../../store/orders/actions";
 import { OrdersState } from "../../../../../../store/rootReducer";
@@ -14,7 +14,7 @@ import Button from "../../../../../../components/button/Button";
 import "./confirmData.scss";
 
 const ConfirmData = () => {
-	const { isDocumentsRequired, clearContextData, formState } = React.useContext(editOrderFormContext);
+	const { isDocumentsRequired, clearContextData, formState } = React.useContext(orderFormContext);
 	const { orderId } = useParams<"orderId">();
 	const filesToDelete = useSelector(
 		(state: OrdersState) => state.orders.orders.find((order) => order._id === orderId)?.documents?.invoice

@@ -1,10 +1,4 @@
-import {
-	OrderResponseData,
-	OrderProgressStatusItem,
-	EditOrderFormState,
-	UploadedFile,
-	CreateOrderFormState,
-} from "../../types";
+import { OrderResponseData, OrderProgressStatusItem, OrderFormState, UploadedFile } from "../../types";
 import { Action } from "../actionHelpers";
 
 export enum OrderActionTypes {
@@ -43,7 +37,7 @@ export type GetOrdersActionSuccess = Action<
 export type CreateOrderAction = Action<
 	typeof OrderActionTypes.CREATE_ORDER_REQUEST,
 	{
-		order: CreateOrderFormState;
+		order: OrderFormState;
 	}
 >;
 export type CreateOrderActionSuccess = Action<
@@ -57,7 +51,7 @@ export type UpdateOrderAction = Action<
 	typeof OrderActionTypes.UPDATE_ORDER_REQUEST,
 	{
 		orderId: string;
-		order: Omit<EditOrderFormState, "status">;
+		order: Omit<OrderFormState, "status">;
 		isDocumentsRequired: boolean;
 		filesToDelete?: UploadedFile[];
 	}

@@ -20,6 +20,13 @@ const InputPrice: React.FC<InputPriceProps> = (props) => {
 	const [field, meta, { setValue }] = useField(name);
 	const [localValue, setLocalValue] = React.useState<string | undefined>(initialValue.toFixed(2));
 
+	// fix of a bug, when localValue is '0.00' while initialValue prop !== 0
+	React.useEffect(() => {
+		if (initialValue !== 0 && localValue === "0.00") {
+			setLocalValue(initialValue.toFixed(2));
+		}
+	}, [initialValue]);
+
 	return (
 		<div className="controlled-price-field">
 			{label && (

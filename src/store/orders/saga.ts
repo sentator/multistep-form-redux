@@ -1,6 +1,6 @@
 import { call, put, takeLatest, takeEvery } from "redux-saga/effects";
 
-import { EditOrderSendData, OrderResponseData, OrderSendData, UploadedFile } from "../../types";
+import { OrderResponseData, OrderSendData, UploadedFile } from "../../types";
 import {
 	OrderActionTypes,
 	GetOrdersAction,
@@ -72,7 +72,7 @@ function* createOrderWorker({
 							passportIssueDate: payload.order.documents.passportIssueDate?.toISOString() ?? "",
 						},
 				  }
-				: { ...payload.order, documents: undefined };
+				: { ...payload.order, documents: {} };
 
 		// upload new order on the server
 		const response: OrderResponseData = yield call(createNewOrder, orderData);
@@ -108,7 +108,7 @@ function* updateOrderWorker({
 		}
 
 		// prepare order data for sending to the server
-		const orderData: EditOrderSendData =
+		const orderData: OrderSendData =
 			payload.isDocumentsRequired && uploadedFiles
 				? {
 						...payload.order,

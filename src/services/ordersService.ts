@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 
-import { EditOrderSendData, OrderProgressStatusItem, OrderResponseData, OrderSendData, UploadedFile } from "../types";
+import { OrderProgressStatusItem, OrderResponseData, OrderSendData, UploadedFile } from "../types";
 import { apiClient } from "../apiClient";
 import { replaceCountryIconPath } from "../utils";
 
@@ -74,7 +74,7 @@ export const createNewOrder = async (orderData: OrderSendData) => {
 	return null;
 };
 
-export const updateOrderData = async (orderId: string, orderData: EditOrderSendData) => {
+export const updateOrderData = async (orderId: string, orderData: OrderSendData) => {
 	try {
 		const response = await apiClient.put<OrderResponseData>(`/api/orders/${orderId}`, orderData, {
 			headers: {

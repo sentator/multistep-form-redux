@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { isValidPhoneNumber } from "libphonenumber-js";
 
 import { StepAddressValues, StepperBarItem } from "../../../../../types";
-import { createOrderFormContext } from "../../../../../context";
+import { orderFormContext } from "../../../../../context";
 import StepperBar from "../../../../../components/stepperBar/StepperBar";
 import Input from "../../../../../components/input/Input";
 import InputPhone from "../../../../../components/inputPhone/InputPhone";
@@ -20,7 +20,7 @@ const Address: React.FC = () => {
 		formState: { address },
 		updateAddress,
 		isDocumentsRequired,
-	} = React.useContext(createOrderFormContext);
+	} = React.useContext(orderFormContext);
 
 	const navigate = useNavigate();
 

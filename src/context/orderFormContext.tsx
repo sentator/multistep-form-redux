@@ -1,9 +1,15 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { CreateOrderFormState, StepAddressValues, StepDocumentsValues, StepGeneralInformationValues } from "../types";
+import {
+	StepAddressValues,
+	StepDocumentsValues,
+	StepGeneralInformationValues,
+	OrderProgressStatusLabel,
+} from "../types";
+import { OrderResponseDataWithFiles, OrderFormState } from "../types/orderForm";
 
-const FORM_DEFAULT_STATE: CreateOrderFormState = {
+const FORM_DEFAULT_STATE: OrderFormState = {
 	generalInformation: {
 		country: null,
 		shop: null,
@@ -29,10 +35,15 @@ const FORM_DEFAULT_STATE: CreateOrderFormState = {
 		deliveryAddress: "",
 		phoneNumber: "",
 	},
+	status: {
+		name: "Заявка оброблена",
+		label: OrderProgressStatusLabel.PROCESSED,
+		createdAt: "",
+	},
 };
 
-interface CreateOrderFormContext {
-	formState: CreateOrderFormState;
+interface OrderFormContext {
+	formState: OrderFormState;
 	updateGeneralInformation: (value: StepGeneralInformationValues) => void;
 	updateDocuments: (value: StepDocumentsValues) => void;
 	updateAddress: (value: StepAddressValues) => void;
@@ -40,9 +51,10 @@ interface CreateOrderFormContext {
 	isDocumentsRequired: boolean;
 	addStepDocuments: () => void;
 	removeStepDocuments: () => void;
+	setInitialState: (data: OrderResponseDataWithFiles) => void;
 }
 
-export const createOrderFormContext = React.createContext<CreateOrderFormContext>({
+export const orderFormContext = React.createContext<OrderFormContext>({
 	formState: FORM_DEFAULT_STATE,
 	updateGeneralInformation: (value) => {},
 	updateDocuments: (value) => {},
@@ -51,6 +63,7 @@ export const createOrderFormContext = React.createContext<CreateOrderFormContext
 	isDocumentsRequired: false,
 	addStepDocuments: () => {},
 	removeStepDocuments: () => {},
+	setInitialState: () => {},
 });
 
 interface ContextProps {
@@ -58,7 +71,7 @@ interface ContextProps {
 }
 
 const Context: React.FC<ContextProps> = ({ children }) => {
-	const [formState, setFormState] = React.useState<CreateOrderFormState>(FORM_DEFAULT_STATE);
+	const [formState, setFormState] = React.useState<OrderFormState>(FORM_DEFAULT_STATE);
 	const [isDocumentsRequired, setDocumentsRequired] = React.useState<boolean>(false);
 
 	const updateGeneralInformation = (value: StepGeneralInformationValues) => {
@@ -85,8 +98,25 @@ const Context: React.FC<ContextProps> = ({ children }) => {
 		setDocumentsRequired(false);
 	};
 
+	const setInitialState = (data: OrderResponseDataWithFiles) => {
+		const documents: OrderFormState["documents"] =
+			data.documents && data.documents.firstName
+				? {
+						...data.documents,
+						birthDate: new Date(data.documents.birthDate),
+						passportIssueDate: new Date(data.documents.passportIssueDate),
+				  }
+				: FORM_DEFAULT_STATE.documents;
+		setFormState({
+			generalInformation: data.generalInformation,
+			documents,
+			address: data.address,
+			status: data.status,
+		});
+	};
+
 	return (
-		<createOrderFormContext.Provider
+		<orderFormContext.Provider
 			value={{
 				formState,
 				updateGeneralInformation,
@@ -96,10 +126,11 @@ const Context: React.FC<ContextProps> = ({ children }) => {
 				isDocumentsRequired,
 				addStepDocuments,
 				removeStepDocuments,
+				setInitialState,
 			}}
 		>
 			{children}
-		</createOrderFormContext.Provider>
+		</orderFormContext.Provider>
 	);
 };
 

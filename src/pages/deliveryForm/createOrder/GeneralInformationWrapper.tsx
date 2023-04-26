@@ -4,7 +4,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import { StepGeneralInformationValues } from "../../../types";
-import { createOrderFormContext } from "../../../context";
+import { orderFormContext } from "../../../context";
 import GeneralInformation from "./steps/generalInformation/GeneralInformation";
 
 const GeneralInformationWrapper: React.FC = () => {
@@ -14,7 +14,7 @@ const GeneralInformationWrapper: React.FC = () => {
 		isDocumentsRequired,
 		addStepDocuments,
 		removeStepDocuments,
-	} = React.useContext(createOrderFormContext);
+	} = React.useContext(orderFormContext);
 	const navigate = useNavigate();
 
 	const validationSchema = Yup.object().shape({
