@@ -1,19 +1,24 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import { EditOrderSendData, StepperBarItem } from "../../../../../../types";
+import { StepperBarItem } from "../../../../../../types";
 import { editOrderFormContext } from "../../../../../../context";
 import { useActionAsync } from "../../../../../../store/action.hook";
+import { updateOrder as updateOrderAction } from "../../../../../../store/orders/actions";
+import { OrdersState } from "../../../../../../store/rootReducer";
 import StepperBar from "../../../../../../components/stepperBar/StepperBar";
 import NavigationLink from "../../../../../../components/navigationLink/NavigationLink";
 import Button from "../../../../../../components/button/Button";
-import { updateOrder as updateOrderAction } from "../../../../../../store/orders/actions";
 
 import "./confirmData.scss";
 
 const ConfirmData = () => {
 	const { isDocumentsRequired, clearContextData, formState } = React.useContext(editOrderFormContext);
 	const { orderId } = useParams<"orderId">();
+	const filesToDelete = useSelector(
+		(state: OrdersState) => state.orders.orders.find((order) => order._id === orderId)?.documents?.invoice
+	);
 	const navigate = useNavigate();
 	const updateOrder = useActionAsync(updateOrderAction);
 	const [isSending, setSending] = React.useState<boolean>(false);
@@ -24,21 +29,12 @@ const ConfirmData = () => {
 	}
 
 	const sendOrderData = async () => {
-		const order: EditOrderSendData = isDocumentsRequired
-			? {
-					generalInformation: formState.generalInformation,
-					documents: formState.documents,
-					address: formState.address,
-			  }
-			: {
-					generalInformation: formState.generalInformation,
-					address: formState.address,
-			  };
+		const { status, ...restOrderState } = formState;
 
 		try {
 			setSending(true);
 
-			await updateOrder({ order, orderId });
+			await updateOrder({ order: restOrderState, orderId, filesToDelete });
 			clearContextData();
 			navigate("/");
 		} catch (e) {

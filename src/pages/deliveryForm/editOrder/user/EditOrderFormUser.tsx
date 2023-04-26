@@ -3,56 +3,62 @@ import { Outlet, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { editOrderFormContext } from "../../../../context";
-import { transformInvoiceItemToFile } from "../../../../utils";
+import { useActionAsync } from "../../../../store/action.hook";
+import { getOrderFiles as getOrderFilesAction } from "../../../../store/orders/actions";
 import { selectOrderById } from "../../../../store/orders/selectors";
 import { OrdersState } from "../../../../store/rootReducer";
 
 import "./editOrderFormUser.scss";
-import { EditOrderResponseData, OrderResponseData, UploadedFile } from "../../../../types";
+import { EditOrderResponseData, OrderFilesItem, OrderResponseData, UploadedFile } from "../../../../types";
 
 const CreateOrderForm: React.FC = () => {
 	const { orderId } = useParams<"orderId">();
 	const order = useSelector((state: OrdersState) => selectOrderById(state, orderId));
+	const getOrderFiles = useActionAsync(getOrderFilesAction);
+	const invoiceFiles = useSelector((state: OrdersState) =>
+		state.orders.files.find((item) => item.orderId === orderId)
+	);
 	const { setInitialState } = React.useContext(editOrderFormContext);
 	const [isLoading, setLoading] = React.useState<boolean>(false);
 	const [error, setError] = React.useState<string | null>(null);
 
 	React.useEffect(() => {
-		if (order) {
-			modifyOrder(order);
+		if (orderId && order?.documents?.invoice && !invoiceFiles) {
+			getFiles(orderId, order.documents.invoice);
 		}
-	}, [order]);
 
-	const modifyOrder = async (order: OrderResponseData) => {
+		if (order) {
+			saveOrderToContext(order, invoiceFiles);
+		}
+	}, [order, invoiceFiles]);
+
+	const getFiles = async (orderId: string, files: UploadedFile[]) => {
 		setLoading(true);
 
-		const invoiceItems = order.documents?.invoice;
-
 		try {
-			const invoiceFiles = invoiceItems?.length ? await getInvoiceFiles(invoiceItems) : null;
-			const modifiedOrder: EditOrderResponseData = order.documents
-				? {
-						...order,
-						documents: {
-							...order.documents,
-							invoiceCurrentFiles: invoiceFiles,
-							invoiceSavedFiles: invoiceItems,
-						},
-				  }
-				: { ...order, documents: undefined };
-
-			setInitialState(modifiedOrder);
+			await getOrderFiles({ orderId, files });
 		} catch (e) {
-			const error = e instanceof Error ? e.message : "Сталася помилка при завантаженні замовлення";
+			const error =
+				e instanceof Error ? e.message : `Сталася помилка при завантаженні файлів для замовлення ${orderId}`;
 			setError(error);
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	const getInvoiceFiles = async (items: UploadedFile[]) => {
-		const invoiceFiles = items.map(transformInvoiceItemToFile);
-		return Promise.all(invoiceFiles);
+	const saveOrderToContext = (order: OrderResponseData, itemFiles?: OrderFilesItem) => {
+		const modifiedOrder: EditOrderResponseData =
+			order.documents && itemFiles
+				? {
+						...order,
+						documents: {
+							...order.documents,
+							invoice: itemFiles.files,
+						},
+				  }
+				: { ...order, documents: undefined };
+
+		setInitialState(modifiedOrder);
 	};
 
 	return (

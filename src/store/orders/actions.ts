@@ -9,6 +9,9 @@ import {
 	UpdateOrderActionSuccess,
 	UpdateOrderStatusAction,
 	UpdateOrderStatusActionSuccess,
+	GetOrderFilesAction,
+	GetOrderFilesActionSuccess,
+	ReplaceOrderFilesItem,
 } from "./actionTypes";
 
 export const getOrders = createAction<GetOrdersAction>(OrderActionTypes.FETCH_ORDERS_REQUEST);
@@ -21,3 +24,6 @@ export const updateOrderStatus = createAction<UpdateOrderStatusAction>(OrderActi
 export const updateOrderStatusSuccess = createAction<UpdateOrderStatusActionSuccess>(
 	OrderActionTypes.UPDATE_ORDER_STATUS_SUCCESS
 );
+export const getOrderFiles = createAction<GetOrderFilesAction>(OrderActionTypes.GET_ORDER_FILES_REQUEST);
+export const getOrderFilesSuccess = createAction<GetOrderFilesActionSuccess>(OrderActionTypes.GET_ORDER_FILES_SUCCESS);
+export const replaceOrderFilesItem = createAction<ReplaceOrderFilesItem>(OrderActionTypes.REPLACE_ORDER_FILES_ITEM);

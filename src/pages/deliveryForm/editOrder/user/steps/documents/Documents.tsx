@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 
-import { EditOrderStepDocumentsValues, StepperBarItem } from "../../../../../../types";
+import { StepDocumentsValues, StepperBarItem } from "../../../../../../types";
 import { editOrderFormContext } from "../../../../../../context";
 import AttachInvoice from "../../../../../../components/attachInvoice/AttachInvoice";
 import Input from "../../../../../../components/input/Input";
@@ -29,7 +29,7 @@ const Documents: React.FC = () => {
 		return <p>Не знайдено замовлення з таким id</p>;
 	}
 
-	const submitStep = (data: EditOrderStepDocumentsValues) => {
+	const submitStep = (data: StepDocumentsValues) => {
 		updateDocuments(data);
 		navigate(`/user/orders/${orderId}/address`);
 	};
@@ -40,7 +40,7 @@ const Documents: React.FC = () => {
 	};
 
 	const validationSchema = Yup.object().shape({
-		invoiceCurrentFiles: Yup.mixed().required("Файл рахунку-фактури є обов'язковим."),
+		invoice: Yup.mixed().required("Файл рахунку-фактури є обов'язковим."),
 		lastName: Yup.string()
 			.required("Значення не повинно бути пустим.")
 			.matches(/^[А-ЩЬЮЯҐЄІЇ-][а-щьюяґєії'-]*$/gi, {
@@ -94,9 +94,9 @@ const Documents: React.FC = () => {
 					<Form className="documents-form">
 						<div className="documents-form__invoice">
 							<AttachInvoice
-								name="invoiceCurrentFiles"
+								name="invoice"
 								id="input_invoice"
-								initialValue={documents.invoiceCurrentFiles}
+								initialValue={documents.invoice}
 								acceptedFormats={["image/jpeg", "image/png", "application/pdf"]}
 							/>
 						</div>

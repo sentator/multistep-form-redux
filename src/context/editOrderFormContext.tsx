@@ -5,7 +5,7 @@ import {
 	StepAddressValues,
 	StepGeneralInformationValues,
 	EditOrderFormState,
-	EditOrderStepDocumentsValues,
+	StepDocumentsValues,
 	OrderProgressStatusLabel,
 	EditOrderResponseData,
 } from "../types";
@@ -21,7 +21,7 @@ const FORM_DEFAULT_STATE: EditOrderFormState = {
 		trackNumber: "",
 	},
 	documents: {
-		invoiceCurrentFiles: null,
+		invoice: null,
 		lastName: "",
 		firstName: "",
 		patronymicName: "",
@@ -46,7 +46,7 @@ const FORM_DEFAULT_STATE: EditOrderFormState = {
 interface EditOrderFormContext {
 	formState: EditOrderFormState;
 	updateGeneralInformation: (value: StepGeneralInformationValues) => void;
-	updateDocuments: (value: EditOrderStepDocumentsValues) => void;
+	updateDocuments: (value: StepDocumentsValues) => void;
 	updateAddress: (value: StepAddressValues) => void;
 	clearContextData: () => void;
 	isDocumentsRequired: boolean;
@@ -79,7 +79,7 @@ const Context: React.FC<ContextProps> = ({ children }) => {
 		setFormState({ ...formState, generalInformation: value });
 	};
 
-	const updateDocuments = (value: EditOrderStepDocumentsValues) => {
+	const updateDocuments = (value: StepDocumentsValues) => {
 		setFormState({ ...formState, documents: value });
 	};
 

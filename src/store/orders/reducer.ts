@@ -3,6 +3,7 @@ import { OrdersActions, OrdersState } from "./types";
 
 const initialState: OrdersState = {
 	orders: [],
+	files: [],
 };
 
 const reducer = (state = initialState, action: OrdersActions): OrdersState => {
@@ -31,6 +32,22 @@ const reducer = (state = initialState, action: OrdersActions): OrdersState => {
 					}
 
 					return order;
+				}),
+			};
+		case OrderActionTypes.GET_ORDER_FILES_SUCCESS:
+			return {
+				...state,
+				files: [...state.files, action.payload.item],
+			};
+		case OrderActionTypes.REPLACE_ORDER_FILES_ITEM:
+			return {
+				...state,
+				files: state.files.map((filesItem) => {
+					if (filesItem.orderId === action.payload.item.orderId) {
+						return action.payload.item;
+					}
+
+					return filesItem;
 				}),
 			};
 		default:

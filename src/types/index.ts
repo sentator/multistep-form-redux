@@ -5,12 +5,7 @@ import {
 	CreateOrderFormState,
 	StepperBarItem,
 } from "./createOrderForm";
-import {
-	EditOrderStepDocumentsValues,
-	EditOrderFormState,
-	EditOrderResponseData,
-	EditOrderSendData,
-} from "./editOrderForm";
+import { EditOrderFormState, EditOrderResponseData, EditOrderSendData } from "./editOrderForm";
 
 interface OptionItem {
 	id: string;
@@ -79,14 +74,30 @@ interface OrderResponseData {
 	status: OrderProgressStatusItem;
 }
 
-interface OrderSendData
-	extends Omit<CreateOrderFormState, "documents">,
-		Partial<Pick<CreateOrderFormState, "documents">> {}
+interface OrderSendData extends Omit<CreateOrderFormState, "documents"> {
+	documents?: {
+		invoice: UploadedFile[];
+		lastName: string;
+		firstName: string;
+		patronymicName: string;
+		passport: string;
+		birthDate: string;
+		passportIssueDate: string;
+		passportIssuedBy: string;
+		registrationAddress: string;
+		identificationNumber: string;
+	};
+}
 
 interface UploadedFile {
 	originalName: string;
 	fileName: string;
 	fileUrl: string;
+}
+
+interface OrderFilesItem {
+	orderId: string;
+	files: File[];
 }
 
 interface OrdersTableData {
@@ -111,7 +122,6 @@ export type {
 	StepDocumentsValues,
 	StepAddressValues,
 	CreateOrderFormState,
-	EditOrderStepDocumentsValues,
 	EditOrderFormState,
 	EditOrderResponseData,
 	EditOrderSendData,
@@ -119,5 +129,6 @@ export type {
 	OrderResponseData,
 	OrderSendData,
 	UploadedFile,
+	OrderFilesItem,
 	OrdersTableData,
 };

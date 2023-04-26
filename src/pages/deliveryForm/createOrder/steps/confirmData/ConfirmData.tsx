@@ -19,15 +19,9 @@ const ConfirmData = () => {
 	const [error, setError] = React.useState<string | null>(null);
 
 	const sendOrderData = async () => {
-		const order = isDocumentsRequired
-			? formState
-			: {
-					generalInformation: formState.generalInformation,
-					address: formState.address,
-			  };
+		setSending(true);
 		try {
-			setSending(true);
-			await createOrder({ order });
+			await createOrder({ order: formState });
 			clearContextData();
 			navigate("/");
 		} catch (e) {
