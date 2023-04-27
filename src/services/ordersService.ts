@@ -10,7 +10,7 @@ export const fetchOrders = async () => {
 	return orders;
 };
 
-const _sendFiles = async (files: File[] | null | undefined) => {
+export const sendFiles = async (files: File[] | null | undefined) => {
 	if (files) {
 		const formData = new FormData();
 
@@ -36,20 +36,29 @@ const _sendFiles = async (files: File[] | null | undefined) => {
 	return null;
 };
 
-export const createNewOrder = async (orderData: OrderSendData) => {
-	const isDocumentsRequired = !!orderData.documents;
-	const uploadedFiles = await _sendFiles(orderData.documents?.invoice);
+export const deleteFiles = async (files: UploadedFile[] | null | undefined) => {
+	if (files) {
+		try {
+			const response = await apiClient.post<{ deletedFiles: UploadedFile[] }>("/api/files/delete", files, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
 
-	if (isDocumentsRequired && !uploadedFiles) {
-		throw new Error("Не прикріплено жодного файлу");
+			return response.data.deletedFiles;
+		} catch (error) {
+			if (isAxiosError<{ deletedFiles: UploadedFile[] }>(error)) {
+				throw new Error("Сталася помилка при видаленні файлів");
+			}
+		}
 	}
 
-	const data = isDocumentsRequired
-		? { ...orderData, documents: { ...orderData.documents, invoice: uploadedFiles } }
-		: orderData;
+	return null;
+};
 
+export const createNewOrder = async (orderData: OrderSendData) => {
 	try {
-		const response = await apiClient.post<OrderResponseData>("/api/orders", JSON.stringify({ ...data }), {
+		const response = await apiClient.post<OrderResponseData>("/api/orders", orderData, {
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -58,7 +67,7 @@ export const createNewOrder = async (orderData: OrderSendData) => {
 		return response.data;
 	} catch (error) {
 		if (isAxiosError<OrderResponseData>(error)) {
-			throw new Error("Не вдалося відправити дані форми");
+			throw new Error("Не вдалося відправити форму");
 		}
 	}
 
@@ -67,23 +76,18 @@ export const createNewOrder = async (orderData: OrderSendData) => {
 
 export const updateOrderData = async (orderId: string, orderData: OrderSendData) => {
 	try {
-		const response = await apiClient.put<OrderResponseData>(
-			`/api/orders/${orderId}`,
-			JSON.stringify({ ...orderData }),
-			{
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
-		);
+		const response = await apiClient.put<OrderResponseData>(`/api/orders/${orderId}`, orderData, {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
 
 		return response.data;
 	} catch (error) {
 		if (isAxiosError<OrderResponseData>(error)) {
-			throw new Error("Не вдалося відправити дані форми");
+			throw new Error("Не вдалося відправити форму");
 		}
 	}
-
 	return null;
 };
 
@@ -102,9 +106,46 @@ export const updateOrderStatus = async (orderId: string, orderStatus: OrderProgr
 		return response.data;
 	} catch (error) {
 		if (isAxiosError<OrderResponseData>(error)) {
-			throw new Error("Не вдалося відправити дані форми");
+			throw new Error("Не вдалося відправити форму");
 		}
 	}
 
 	return null;
+};
+
+export const getOrderFiles = (orderId: string, files: UploadedFile[]) => {
+	try {
+		const filesPromises = files.map(async (item) => {
+			const extensionStartIndex = item.fileName.indexOf(".");
+			const fileExtension = item.fileName.slice(extensionStartIndex + 1);
+			let options: { type: string } | undefined = undefined;
+
+			switch (fileExtension) {
+				case "png":
+					options = { type: "image/png" };
+					break;
+				case "jpg":
+					options = { type: "image/jpeg" };
+					break;
+				case "pdf":
+					options = { type: "application/pdf" };
+					break;
+				default:
+					break;
+			}
+
+			const file = await fetch(item.fileUrl)
+				.then((r) => r.blob())
+				.then((blobFile) => new File([blobFile], item.originalName, options))
+				.catch((e) => {
+					throw new Error(e);
+				});
+
+			return file;
+		});
+
+		return Promise.all(filesPromises);
+	} catch (e) {
+		throw new Error(`Не вдалося завантажити файли для замовлення ${orderId}`);
+	}
 };

@@ -6,6 +6,10 @@
 		min-width: 1250px;
 		border-collapse: collapse;
 		text-align: center;
+		@media (max-width: 48em) {
+			min-width: 100%;
+			text-align: left;
+		}
 	}
 	th {
 		background-color: (var(--mainRedColor));
@@ -13,15 +17,66 @@
 		color: var(--mainWhiteColor);
 		font-family: var(--fontFamily);
 		vertical-align: baseline;
+		@media (max-width: 48em) {
+			display: none;
+		}
 	}
 	tr {
 		border-top: 1px solid var(--gullGrayColor);
 		border-bottom: 1px solid var(--gullGrayColor);
+		@media (max-width: 48em) {
+			display: grid;
+			grid-template-columns: auto;
+		}
 	}
 	td {
 		padding: 10px;
 		border-left: 1px solid var(--gullGrayColor);
 		border-right: 1px solid var(--gullGrayColor);
+		@media (max-width: 48em) {
+			display: grid;
+			grid-template-columns: 200px 1fr;
+			column-gap: 10px;
+			&::before {
+				font-weight: 600;
+			}
+			&:nth-child(2)::before {
+				content: "Країна";
+			}
+			&:nth-child(3)::before {
+				content: "Магазин";
+			}
+			&:nth-child(4)::before {
+				content: "Назва посилки";
+			}
+			&:nth-child(5)::before {
+				content: "Трек-номер";
+			}
+			&:nth-child(6)::before {
+				content: "Назва товару";
+			}
+			&:nth-child(7)::before {
+				content: "Кількість, од.";
+			}
+			&:nth-child(8)::before {
+				content: "Вартість, всього / за 1 од.";
+			}
+			&:nth-child(9)::before {
+				content: "Статус";
+			}
+			&:nth-child(10)::before {
+				content: "Дії користувача";
+				margin-bottom: 5px;
+			}
+			&:nth-child(11)::before {
+				content: "Дії адміністратора";
+				margin-bottom: 5px;
+			}
+		}
+		@media (max-width: 30em) {
+			grid-template-columns: 1fr;
+			padding: 5px 10px;
+		}
 	}
 	thead {
 		tr {
