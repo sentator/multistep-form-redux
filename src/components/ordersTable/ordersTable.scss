@@ -1,6 +1,17 @@
 .orders-table {
 	max-width: 100%;
 	overflow-x: auto;
+	&__header {
+		&:not(:last-child) {
+			margin-bottom: 8px;
+		}
+	}
+	&__body {
+	}
+	&__empty {
+		font-size: 1rem;
+		padding: 8px 4px;
+	}
 	table {
 		table-layout: fixed;
 		min-width: 1250px;

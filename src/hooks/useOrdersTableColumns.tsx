@@ -69,7 +69,7 @@ const useOrdersTableColumns = () => {
 					{
 						id: "status",
 						Header: "Статус",
-						accessor: "status",
+						accessor: "status.name",
 						Cell: (value: any) => {
 							const status = value.cell.row.original.status;
 							const formattedDate = Boolean(status.createdAt)

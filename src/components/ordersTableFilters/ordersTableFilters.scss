@@ -1,0 +1,38 @@
+.orders-table-filters {
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+	@media (max-width: 30em) {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	/* .orders-table-filters__filter */
+	&__filter {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	/* .orders-table-filters__label */
+	&__label {
+	}
+	/* .orders-table-filters__select */
+	&__select {
+		margin-left: 2px;
+		margin-right: 2px;
+		min-height: 43px;
+		padding: 8px;
+		border-radius: 0;
+		font-size: 0.875rem;
+		&:focus-visible {
+			outline: 2px solid var(--mainFocusColor);
+		}
+	}
+	/* .orders-table-filters__button */
+	&__button {
+		@media (max-width: 30em) {
+			.button {
+				width: 100%;
+			}
+		}
+	}
+}
