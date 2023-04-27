@@ -1,12 +1,16 @@
 .orders-table {
-	max-width: 100%;
-	overflow-x: auto;
 	&__header {
 		&:not(:last-child) {
 			margin-bottom: 8px;
 		}
 	}
 	&__body {
+		min-height: 600px;
+		max-width: 100%;
+		overflow-x: auto;
+		&:not(:last-child) {
+			margin-bottom: 8px;
+		}
 	}
 	&__empty {
 		font-size: 1rem;

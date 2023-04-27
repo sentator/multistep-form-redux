@@ -1,8 +1,10 @@
+// @ts-nocheck
 import React from "react";
-import { useTable, Column, useExpanded, useFilters } from "react-table";
+import { useTable, Column, useExpanded, useFilters, usePagination } from "react-table";
 
 import { OrdersTableData } from "../../types";
 import OrdersTableFilters from "../ordersTableFilters/OrdersTableFilters";
+import OrdersTablePagination from "../ordersTablePagination/OrdersTablePagination";
 
 import "./ordersTable.scss";
 
@@ -12,18 +14,36 @@ interface OrdersTableProps {
 }
 
 const OrdersTable: React.FC<OrdersTableProps> = ({ columns, data }) => {
-	// @ts-ignore
-	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setFilter } = useTable(
+	const {
+		getTableProps,
+		getTableBodyProps,
+		headerGroups,
+		page,
+		nextPage,
+		previousPage,
+		canNextPage,
+		canPreviousPage,
+		pageOptions,
+		gotoPage,
+		pageCount,
+		prepareRow,
+		state,
+		setFilter,
+	} = useTable(
 		{
 			columns,
 			data,
+			initialState: {
+				pageSize: 2,
+			},
+			paginateExpandedRows: false,
 		},
 		useFilters,
-		useExpanded
+		useExpanded,
+		usePagination
 	);
 
-	// @ts-ignore
-	const { filter }: { filter: string } = state;
+	const { filter, pageIndex }: { filter: string; pageIndex: number } = state;
 
 	return (
 		<div className="orders-table">
@@ -47,11 +67,11 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ columns, data }) => {
 						))}
 					</thead>
 					<tbody {...getTableBodyProps()}>
-						{rows.map((row) => {
+						{page.map((row: any) => {
 							prepareRow(row);
 							return (
 								<tr {...row.getRowProps()}>
-									{row.cells.map((cell) => {
+									{row.cells.map((cell: any) => {
 										return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
 									})}
 								</tr>
@@ -59,9 +79,21 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ columns, data }) => {
 						})}
 					</tbody>
 				</table>
-				{rows.length === 0 && (
+				{page.length === 0 && (
 					<p className="orders-table__empty">Не знайдено жодної позиції, що відповідає заданим критеріям</p>
 				)}
+			</div>
+			<div className="orders-table__footer">
+				<OrdersTablePagination
+					currentPage={pageIndex + 1}
+					pages={pageOptions.length}
+					canPreviousPage={canPreviousPage}
+					canNextPage={canNextPage}
+					gotoPreviousPage={() => previousPage()}
+					gotoNextPage={() => nextPage()}
+					gotoStart={() => gotoPage(0)}
+					gotoEnd={() => gotoPage(pageCount - 1)}
+				/>
 			</div>
 		</div>
 	);
