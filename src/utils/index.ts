@@ -8,6 +8,7 @@ import { prepareOrdersTableData } from "./prepareOrdersTableData";
 import { getYearsFromRange } from "./getYearsFromRange";
 import { replaceCountryIconPath } from "./replaceCountryIconPath";
 import { formatDateForOrderStatus } from "./formatDateForOrderStatus";
+import { ordersTableDefaultGlobalFilter } from "./ordersTableDefaultGlobalFilter";
 
 export {
 	COUNTRIES,
@@ -23,4 +24,5 @@ export {
 	getYearsFromRange,
 	replaceCountryIconPath,
 	formatDateForOrderStatus,
+	ordersTableDefaultGlobalFilter,
 };

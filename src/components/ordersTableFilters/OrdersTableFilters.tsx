@@ -6,17 +6,16 @@ import "./ordersTableFilters.scss";
 
 interface OrdersTableFiltersProps {
 	filterValue: string;
-	setFilterValue: (columnId: string, value: string) => void;
-	columnId: string;
+	setFilterValue: (value: string) => void;
 	options: string[];
 }
 
-const OrdersTableFilters: React.FC<OrdersTableFiltersProps> = ({ filterValue, setFilterValue, columnId, options }) => {
+const OrdersTableFilters: React.FC<OrdersTableFiltersProps> = ({ filterValue, setFilterValue, options }) => {
 	const selectRef = React.useRef<HTMLSelectElement>(null);
 
 	const applyFilter = () => {
 		if (selectRef.current) {
-			setFilterValue(columnId, selectRef.current.value);
+			setFilterValue(selectRef.current.value);
 		}
 	};
 

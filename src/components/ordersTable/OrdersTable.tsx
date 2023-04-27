@@ -1,8 +1,9 @@
 // @ts-nocheck
 import React from "react";
-import { useTable, Column, useExpanded, useFilters, usePagination } from "react-table";
+import { useTable, Column, useExpanded, useFilters, usePagination, useGlobalFilter } from "react-table";
 
 import { OrdersTableData } from "../../types";
+import { ordersTableDefaultGlobalFilter } from "../../utils";
 import OrdersTableFilters from "../ordersTableFilters/OrdersTableFilters";
 import OrdersTablePagination from "../ordersTablePagination/OrdersTablePagination";
 
@@ -14,6 +15,7 @@ interface OrdersTableProps {
 }
 
 const OrdersTable: React.FC<OrdersTableProps> = ({ columns, data }) => {
+	const filterOptions = { filteredIds: ["status"] };
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -28,30 +30,33 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ columns, data }) => {
 		pageCount,
 		prepareRow,
 		state,
-		setFilter,
+		setGlobalFilter,
 	} = useTable(
 		{
 			columns,
 			data,
 			initialState: {
-				pageSize: 2,
+				pageSize: 5,
 			},
 			paginateExpandedRows: false,
+			getSubRows: (row: any) => row.subRows,
+			globalFilter: (rows, columnIds, filterValue) =>
+				ordersTableDefaultGlobalFilter(rows, columnIds, filterValue, filterOptions),
 		},
+		useGlobalFilter,
 		useFilters,
 		useExpanded,
 		usePagination
 	);
 
-	const { filter, pageIndex }: { filter: string; pageIndex: number } = state;
+	const { pageIndex, globalFilter }: { pageIndex: number; globalFilter: string } = state;
 
 	return (
 		<div className="orders-table">
 			<div className="orders-table__header">
 				<OrdersTableFilters
-					filterValue={filter}
-					setFilterValue={setFilter}
-					columnId="status"
+					filterValue={globalFilter}
+					setFilterValue={setGlobalFilter}
 					options={["Заявка оброблена", "В транзиті", "На складі", "У відділенні"]}
 				/>
 			</div>
