@@ -1,4 +1,4 @@
-import Homepage from "./homePage/Homepage";
+import OrdersListPage from "./ordersListPage/OrdersListPage";
 import SuccessPage from "./successPage/SuccessPage";
 
-export { Homepage, SuccessPage };
+export { OrdersListPage, SuccessPage };

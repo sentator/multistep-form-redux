@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -9,13 +9,19 @@ import GeneralInformation from "./steps/generalInformation/GeneralInformation";
 
 const GeneralInformationWrapper: React.FC = () => {
 	const {
-		formState: { generalInformation },
+		formState: { generalInformation, status },
 		updateGeneralInformation,
 		isDocumentsRequired,
 		addStepDocuments,
 		removeStepDocuments,
+		clearContextData,
 	} = React.useContext(orderFormContext);
+	const { orderId } = useParams<"orderId">();
 	const navigate = useNavigate();
+
+	if (!orderId) {
+		return <p>Не знайдено замовлення з таким id</p>;
+	}
 
 	const validationSchema = Yup.object().shape({
 		country: Yup.mixed().required("Значення не повинно бути пустим."),
@@ -42,14 +48,23 @@ const GeneralInformationWrapper: React.FC = () => {
 				),
 			})
 		),
-		trackNumber: Yup.string().optional().min(6, "Значення занадто коротке. Повинно бути 6 символів або більше."),
+		trackNumber: Yup.string()
+			.required("Значення не повинно бути пустим.")
+			.min(6, "Значення занадто коротке. Повинно бути 6 символів або більше."),
 	});
 
 	const submitStep = (data: StepGeneralInformationValues) => {
 		updateGeneralInformation(data);
 
-		const nextStepUrl = isDocumentsRequired ? "/new-order/documents" : "/new-order/address";
+		const nextStepUrl = isDocumentsRequired
+			? `/user/orders/${orderId}/documents`
+			: `/user/orders/${orderId}/address`;
 		navigate(nextStepUrl);
+	};
+
+	const cancelEditing = () => {
+		clearContextData();
+		navigate("/");
 	};
 
 	return (
@@ -68,6 +83,8 @@ const GeneralInformationWrapper: React.FC = () => {
 							resetShopValue={() => setFieldValue("shop", null)}
 							addStepDocuments={addStepDocuments}
 							removeStepDocuments={removeStepDocuments}
+							cancelEditing={cancelEditing}
+							orderStatus={status}
 						/>
 					</Form>
 				)}

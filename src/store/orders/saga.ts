@@ -32,12 +32,12 @@ function* fetchOrdersWorker({
 	type,
 	payload,
 	meta,
-}: GetOrdersAction & { meta: { resolve: (value: OrderResponseData[]) => void; reject: (reason?: unknown) => void } }) {
+}: GetOrdersAction & { meta: { resolve: () => void; reject: (reason?: unknown) => void } }) {
 	try {
 		const response: OrderResponseData[] = yield call(fetchOrders);
 
-		meta.resolve(response);
 		yield put(getOrdersSuccess({ orders: response }));
+		yield meta.resolve();
 	} catch (error) {
 		meta.reject(error);
 	}
@@ -47,7 +47,7 @@ function* createOrderWorker({
 	type,
 	payload,
 	meta,
-}: CreateOrderAction & { meta: { resolve: (value: OrderResponseData) => void; reject: (reason?: unknown) => void } }) {
+}: CreateOrderAction & { meta: { resolve: () => void; reject: (reason?: unknown) => void } }) {
 	try {
 		const isDocumentsRequired = !!payload.order.documents.invoice;
 
@@ -82,8 +82,8 @@ function* createOrderWorker({
 			? put(getOrderFilesSuccess({ item: { orderId: response._id, files: payload.order.documents.invoice } }))
 			: null;
 
-		meta.resolve(response);
 		yield put(createOrderSuccess({ order: response }));
+		yield meta.resolve();
 	} catch (error) {
 		meta.reject(error);
 	}
@@ -93,7 +93,7 @@ function* updateOrderWorker({
 	type,
 	payload,
 	meta,
-}: UpdateOrderAction & { meta: { resolve: (value: OrderResponseData) => void; reject: (reason?: unknown) => void } }) {
+}: UpdateOrderAction & { meta: { resolve: () => void; reject: (reason?: unknown) => void } }) {
 	try {
 		// remove saved files from on the server
 		yield payload.isDocumentsRequired ? call(deleteFiles, payload.filesToDelete) : null;
@@ -129,8 +129,8 @@ function* updateOrderWorker({
 			? put(replaceOrderFilesItem({ item: { orderId: payload.orderId, files: payload.order.documents.invoice } }))
 			: put(removeOrderFilesItem({ orderId: payload.orderId }));
 
-		meta.resolve(response);
 		yield put(updateOrderSuccess({ order: response }));
+		yield meta.resolve();
 	} catch (error) {
 		meta.reject(error);
 	}
@@ -141,13 +141,13 @@ function* updateOrderStatusWorker({
 	payload,
 	meta,
 }: UpdateOrderStatusAction & {
-	meta: { resolve: (value: OrderResponseData) => void; reject: (reason?: unknown) => void };
+	meta: { resolve: () => void; reject: (reason?: unknown) => void };
 }) {
 	try {
 		const response: OrderResponseData = yield call(updateOrderStatus, payload.orderId, payload.status);
 
-		meta.resolve(response);
 		yield put(updateOrderStatusSuccess({ order: response }));
+		yield meta.resolve();
 	} catch (error) {
 		meta.reject(error);
 	}
@@ -158,13 +158,13 @@ function* getOrderFilesWorker({
 	payload,
 	meta,
 }: GetOrderFilesAction & {
-	meta: { resolve: (value: File[]) => void; reject: (reason?: unknown) => void };
+	meta: { resolve: () => void; reject: (reason?: unknown) => void };
 }) {
 	try {
 		const response: File[] = yield call(getOrderFiles, payload.orderId, payload.files);
 
-		meta.resolve(response);
 		yield put(getOrderFilesSuccess({ item: { orderId: payload.orderId, files: response } }));
+		yield meta.resolve();
 	} catch (error) {
 		meta.reject(error);
 	}

@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { StepperBarItem } from "../../../../../types";
-import { orderFormContext } from "../../../../../context";
-import { useActionAsync } from "../../../../../store/action.hook";
-import StepperBar from "../../../../../components/stepperBar/StepperBar";
-import NavigationLink from "../../../../../components/navigationLink/NavigationLink";
-import Button from "../../../../../components/button/Button";
-import { createOrder as createOrderAction } from "../../../../../store/orders/actions";
+import { StepperBarItem } from "../../../../types";
+import { orderFormContext } from "../../../../context";
+import { useActionAsync } from "../../../../store/action.hook";
+import StepperBar from "../../../../components/stepperBar/StepperBar";
+import NavigationLink from "../../../../components/navigationLink/NavigationLink";
+import Button from "../../../../components/button/Button";
+import { createOrder as createOrderAction } from "../../../../store/orders/actions";
 
 import "./confirmData.scss";
 

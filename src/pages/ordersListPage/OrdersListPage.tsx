@@ -9,9 +9,9 @@ import OrdersTable from "../../components/ordersTable/OrdersTable";
 import { getOrders as getOrdersAction } from "../../store/orders/actions";
 import { ordersSelector } from "../../store/orders/selectors";
 
-import "./homepage.scss";
+import "./ordersListPage.scss";
 
-const Homepage = () => {
+const OrdersListPage = () => {
 	const columns = useOrdersTableColumns();
 	const orders = useSelector(ordersSelector);
 
@@ -67,4 +67,4 @@ const Homepage = () => {
 	);
 };
 
-export default Homepage;
+export default OrdersListPage;

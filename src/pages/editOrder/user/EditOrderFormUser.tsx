@@ -2,14 +2,14 @@ import React from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { orderFormContext } from "../../../../context";
-import { useActionAsync } from "../../../../store/action.hook";
-import { getOrderFiles as getOrderFilesAction } from "../../../../store/orders/actions";
-import { selectOrderById } from "../../../../store/orders/selectors";
-import { OrdersState } from "../../../../store/rootReducer";
+import { OrderResponseDataWithFiles, OrderFilesItem, OrderResponseData, UploadedFile } from "../../../types";
+import { orderFormContext } from "../../../context";
+import { useActionAsync } from "../../../store/action.hook";
+import { getOrderFiles as getOrderFilesAction } from "../../../store/orders/actions";
+import { selectOrderById } from "../../../store/orders/selectors";
+import { OrdersState } from "../../../store/rootReducer";
 
 import "./editOrderFormUser.scss";
-import { OrderResponseDataWithFiles, OrderFilesItem, OrderResponseData, UploadedFile } from "../../../../types";
 
 const CreateOrderForm: React.FC = () => {
 	const { orderId } = useParams<"orderId">();

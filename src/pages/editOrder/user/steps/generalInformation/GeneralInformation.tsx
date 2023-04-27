@@ -5,25 +5,18 @@ import {
 	OrderProgressStatusLabel,
 	StepGeneralInformationValues,
 	StepperBarItem,
-} from "../../../../../../types";
-import {
-	COUNTRIES,
-	CURRENCY,
-	SHOPS,
-	calcTotalPrice,
-	calcCustomsFees,
-	getFormattedPrice,
-} from "../../../../../../utils";
-import { useWatch } from "../../../../../../hooks";
-import { Autocomplete } from "../../../../../../components/autocomplete/Autocomplete";
-import Input from "../../../../../../components/input/Input";
-import OrderComposition from "../../../../../../components/orderComposition/OrderComposition";
-import CardsInformation from "../../../../../../components/cardsInformation/CardsInformation";
-import SectionTracking from "../../../../../../components/sectionTracking/SectionTracking";
-import NavigationLink from "../../../../../../components/navigationLink/NavigationLink";
-import NavigationButton from "../../../../../../components/navigationButton/NavigationButton";
-import Button from "../../../../../../components/button/Button";
-import StepperBar from "../../../../../../components/stepperBar/StepperBar";
+} from "../../../../../types";
+import { COUNTRIES, CURRENCY, SHOPS, calcTotalPrice, calcCustomsFees, getFormattedPrice } from "../../../../../utils";
+import { useWatch } from "../../../../../hooks";
+import { Autocomplete } from "../../../../../components/autocomplete/Autocomplete";
+import Input from "../../../../../components/input/Input";
+import OrderComposition from "../../../../../components/orderComposition/OrderComposition";
+import CardsInformation from "../../../../../components/cardsInformation/CardsInformation";
+import SectionTracking from "../../../../../components/sectionTracking/SectionTracking";
+import NavigationLink from "../../../../../components/navigationLink/NavigationLink";
+import NavigationButton from "../../../../../components/navigationButton/NavigationButton";
+import Button from "../../../../../components/button/Button";
+import StepperBar from "../../../../../components/stepperBar/StepperBar";
 
 import "./generalInformation.scss";
 

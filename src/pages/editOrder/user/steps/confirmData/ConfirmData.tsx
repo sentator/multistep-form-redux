@@ -2,14 +2,14 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { StepperBarItem } from "../../../../../../types";
-import { orderFormContext } from "../../../../../../context";
-import { useActionAsync } from "../../../../../../store/action.hook";
-import { updateOrder as updateOrderAction } from "../../../../../../store/orders/actions";
-import { OrdersState } from "../../../../../../store/rootReducer";
-import StepperBar from "../../../../../../components/stepperBar/StepperBar";
-import NavigationLink from "../../../../../../components/navigationLink/NavigationLink";
-import Button from "../../../../../../components/button/Button";
+import { StepperBarItem } from "../../../../../types";
+import { orderFormContext } from "../../../../../context";
+import { useActionAsync } from "../../../../../store/action.hook";
+import { updateOrder as updateOrderAction } from "../../../../../store/orders/actions";
+import { OrdersState } from "../../../../../store/rootReducer";
+import StepperBar from "../../../../../components/stepperBar/StepperBar";
+import NavigationLink from "../../../../../components/navigationLink/NavigationLink";
+import Button from "../../../../../components/button/Button";
 
 import "./confirmData.scss";
 

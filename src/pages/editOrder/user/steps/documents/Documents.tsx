@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import { StepDocumentsValues, StepperBarItem } from "../../../../../types";
@@ -8,24 +8,35 @@ import { orderFormContext } from "../../../../../context";
 import AttachInvoice from "../../../../../components/attachInvoice/AttachInvoice";
 import Input from "../../../../../components/input/Input";
 import DatePicker from "../../../../../components/datePicker/DatePicker";
+import Button from "../../../../../components/button/Button";
 import NavigationButton from "../../../../../components/navigationButton/NavigationButton";
 import NavigationLink from "../../../../../components/navigationLink/NavigationLink";
 import StepperBar from "../../../../../components/stepperBar/StepperBar";
 
 import "./documents.scss";
-import Button from "../../../../../components/button/Button";
 
 const Documents: React.FC = () => {
 	const {
 		formState: { documents },
 		updateDocuments,
+		clearContextData,
 	} = React.useContext(orderFormContext);
 
+	const { orderId } = useParams<"orderId">();
 	const navigate = useNavigate();
+
+	if (!orderId) {
+		return <p>Не знайдено замовлення з таким id</p>;
+	}
 
 	const submitStep = (data: StepDocumentsValues) => {
 		updateDocuments(data);
-		navigate("/new-order/address");
+		navigate(`/user/orders/${orderId}/address`);
+	};
+
+	const cancelEditing = () => {
+		clearContextData();
+		navigate("/");
 	};
 
 	const validationSchema = Yup.object().shape({
@@ -64,7 +75,11 @@ const Documents: React.FC = () => {
 	});
 
 	const steps: StepperBarItem[] = [
-		{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
+		{
+			title: "Інформація про відправлення",
+			status: "completed",
+			url: `/user/orders/${orderId}/general-information`,
+		},
 		{ title: "Документи", status: "editing" },
 		{ title: "Адреса отримання", status: "hidden" },
 	];
@@ -135,9 +150,9 @@ const Documents: React.FC = () => {
 							/>
 						</div>
 						<div className="documents-form__row documents-form__row--controls">
-							<Button title="Скасувати" type="button" onClick={() => navigate("/")} />
+							<Button title="Скасувати" type="button" onClick={cancelEditing} />
 							<div className="documents-form__navigation">
-								<NavigationLink title="Назад" to="/new-order/general-information" />
+								<NavigationLink title="Назад" to={`/user/orders/${orderId}/general-information`} />
 								<NavigationButton title="Продовжити" iconPosition="right" type="submit" />
 							</div>
 						</div>

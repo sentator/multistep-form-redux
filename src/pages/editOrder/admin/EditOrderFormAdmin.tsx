@@ -4,13 +4,13 @@ import { Formik, Form } from "formik";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 
-import { ORDER_STATUS_OPTIONS } from "../../../../utils";
-import { OrdersState } from "../../../../store/rootReducer";
-import { useActionAsync } from "../../../../store/action.hook";
-import { updateOrderStatus as updateOrderStatusAction } from "../../../../store/orders/actions";
-import { selectOrderById } from "../../../../store/orders/selectors";
-import { Autocomplete } from "../../../../components/autocomplete/Autocomplete";
-import Button from "../../../../components/button/Button";
+import { ORDER_STATUS_OPTIONS } from "../../../utils";
+import { OrdersState } from "../../../store/rootReducer";
+import { useActionAsync } from "../../../store/action.hook";
+import { updateOrderStatus as updateOrderStatusAction } from "../../../store/orders/actions";
+import { selectOrderById } from "../../../store/orders/selectors";
+import { Autocomplete } from "../../../components/autocomplete/Autocomplete";
+import Button from "../../../components/button/Button";
 
 import "./editOrderFormAdmin.scss";
 

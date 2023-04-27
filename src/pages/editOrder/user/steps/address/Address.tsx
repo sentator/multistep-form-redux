@@ -1,10 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { isValidPhoneNumber } from "libphonenumber-js";
 
-import { StepAddressValues, StepperBarItem } from "../../../../../types";
+import { StepAddressValues, StepperBarItem, OrderProgressStatusLabel } from "../../../../../types";
 import { orderFormContext } from "../../../../../context";
 import StepperBar from "../../../../../components/stepperBar/StepperBar";
 import Input from "../../../../../components/input/Input";
@@ -17,19 +17,35 @@ import "./address.scss";
 
 const Address: React.FC = () => {
 	const {
-		formState: { address },
+		formState: { address, status },
 		updateAddress,
 		isDocumentsRequired,
+		clearContextData,
 	} = React.useContext(orderFormContext);
 
+	const { orderId } = useParams<"orderId">();
 	const navigate = useNavigate();
 
-	const prevStep = isDocumentsRequired ? "/new-order/documents" : "/new-order/general-information";
-	const nextStep = "/new-order/confirm-data";
+	if (!orderId) {
+		return <p>Не знайдено замовлення з таким id</p>;
+	}
+
+	const prevStep = isDocumentsRequired
+		? `/user/orders/${orderId}/documents`
+		: `/user/orders/${orderId}/general-information`;
+	const nextStep = `/user/orders/${orderId}/confirm-data`;
+
+	const shouldDisableAdressInput =
+		status.label === OrderProgressStatusLabel.TRANSIT || status.label === OrderProgressStatusLabel.DEPARTMENT;
 
 	const submitStep = (data: StepAddressValues) => {
 		updateAddress(data);
 		navigate(nextStep);
+	};
+
+	const cancelEditing = () => {
+		clearContextData();
+		navigate("/");
 	};
 
 	const validationSchema = Yup.object().shape({
@@ -46,12 +62,20 @@ const Address: React.FC = () => {
 
 	const steps: StepperBarItem[] = isDocumentsRequired
 		? [
-				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
-				{ title: "Документи", status: "completed", url: "/new-order/documents" },
+				{
+					title: "Інформація про відправлення",
+					status: "completed",
+					url: `/user/orders/${orderId}/general-information`,
+				},
+				{ title: "Документи", status: "completed", url: `/user/orders/${orderId}/documents` },
 				{ title: "Адреса отримання", status: "editing" },
 		  ]
 		: [
-				{ title: "Інформація про відправлення", status: "completed", url: "/new-order/general-information" },
+				{
+					title: "Інформація про відправлення",
+					status: "completed",
+					url: `/user/orders/${orderId}/general-information`,
+				},
 				{ title: "Адреса отримання", status: "editing" },
 		  ];
 
@@ -65,7 +89,12 @@ const Address: React.FC = () => {
 					<Form className="address-form">
 						<div className="address-form__row">
 							<div className="address-form__column">
-								<Input name="deliveryAddress" id="input_delivery-address" label="Адреса доставки" />
+								<Input
+									name="deliveryAddress"
+									id="input_delivery-address"
+									label="Адреса доставки"
+									readOnly={shouldDisableAdressInput}
+								/>
 							</div>
 							<div className="address-form__column">
 								<InputPhone
@@ -77,7 +106,7 @@ const Address: React.FC = () => {
 							</div>
 						</div>
 						<div className="address-form__row address-form__row--controls">
-							<Button title="Скасувати" type="button" onClick={() => navigate("/")} />
+							<Button title="Скасувати" type="button" onClick={cancelEditing} />
 							<div className="address-form__navigation">
 								<NavigationLink title="Назад" to={prevStep} />
 								<NavigationButton title="Продовжити" iconPosition="right" type="submit" />

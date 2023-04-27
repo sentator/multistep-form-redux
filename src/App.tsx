@@ -1,22 +1,16 @@
 import { Routes, Route } from "react-router-dom";
 
-import { Homepage, SuccessPage } from "./pages";
+import { OrdersListPage, SuccessPage } from "./pages";
 import { createOrderFormPaths, editOrderFormUserPaths } from "./pages/paths";
-import {
-	GeneralInformationWrapper,
-	CreateOrderForm,
-	Documents,
-	Address,
-	ConfirmData,
-} from "./pages/deliveryForm/createOrder";
-import EditOrderFormAdmin from "./pages/deliveryForm/editOrder/admin/EditOrderFormAdmin";
+import { GeneralInformationWrapper, CreateOrderForm, Documents, Address, ConfirmData } from "./pages/createOrder";
+import EditOrderFormAdmin from "./pages/editOrder/admin/EditOrderFormAdmin";
 import {
 	EditOrderFormUser,
 	GeneralInformationWrapper as GeneralInformationWrapperUser,
 	Documents as DocumentsUser,
 	Address as AddressUser,
 	ConfirmData as ConfirmDataUser,
-} from "./pages/deliveryForm/editOrder/user";
+} from "./pages/editOrder/user";
 import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
@@ -24,7 +18,7 @@ function App() {
 		<div className="app">
 			<ScrollToTop />
 			<Routes>
-				<Route path="/" element={<Homepage />} />
+				<Route path="/" element={<OrdersListPage />} />
 				<Route path={createOrderFormPaths["/new-order"]} element={<CreateOrderForm />}>
 					<Route
 						path={createOrderFormPaths["/new-order/general-information"]}
